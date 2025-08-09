@@ -1,0 +1,47 @@
+import { site } from "@/config/site";
+
+export default function Footer() {
+  return (
+    <footer className="border-t mt-12" role="contentinfo">
+      <div className="container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section aria-labelledby="footer-brand">
+          <h2 id="footer-brand" className="text-xl font-bold">{site.name.toUpperCase()}</h2>
+          <p className="text-muted-foreground mt-2">Your trusted partner for all battery solutions</p>
+        </section>
+
+        <nav aria-labelledby="footer-quick-links">
+          <h3 id="footer-quick-links" className="font-semibold mb-3">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a className="hover:underline" href="/privacy">Privacy Policy</a>
+            </li>
+            <li>
+              <a className="hover:underline" href="/terms">Terms & Conditions</a>
+            </li>
+          </ul>
+        </nav>
+
+        <nav aria-labelledby="footer-follow-us">
+          <h3 id="footer-follow-us" className="font-semibold mb-3">Follow Us</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a className="hover:underline" href="#" target="_blank" rel="noreferrer">Facebook</a>
+            </li>
+            <li>
+              <a className="hover:underline" href="#" target="_blank" rel="noreferrer">Instagram</a>
+            </li>
+            <li>
+              <a className="hover:underline" href={`https://wa.me/${site.whatsappNumber}`} target="_blank" rel="noreferrer">WhatsApp</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="border-t">
+        <div className="container mx-auto px-4 py-6">
+          <p className="text-center text-sm text-muted-foreground">© 2025 SARKAR SALES. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}

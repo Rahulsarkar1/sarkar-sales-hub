@@ -73,6 +73,11 @@ export default function Index() {
             accent="exide"
           />
           <CategorySection
+            title="Microtek Inverters"
+            products={filtered["Microtek Inverters"]}
+            accent="microtek"
+          />
+          <CategorySection
             title="Car Batteries"
             products={filtered["Car Batteries"]}
             accent="car"
@@ -81,11 +86,6 @@ export default function Index() {
             title="Bike Batteries"
             products={filtered["Bike Batteries"]}
             accent="bike"
-          />
-          <CategorySection
-            title="Microtek Inverters"
-            products={filtered["Microtek Inverters"]}
-            accent="microtek"
           />
 
           <WhyUs />
