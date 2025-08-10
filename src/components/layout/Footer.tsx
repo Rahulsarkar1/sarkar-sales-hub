@@ -3,8 +3,8 @@ import { site } from "@/config/site";
 export default function Footer() {
   return (
     <footer className="border-t mt-12" role="contentinfo">
-      <div className="container mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <section aria-labelledby="footer-brand">
+      <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 gap-8">
+        <section aria-labelledby="footer-brand" className="col-span-2 md:col-span-1">
           <h2 id="footer-brand" className="text-xl font-bold">{site.name.toUpperCase()}</h2>
           <p className="text-muted-foreground mt-2">Your trusted partner for all battery solutions</p>
         </section>

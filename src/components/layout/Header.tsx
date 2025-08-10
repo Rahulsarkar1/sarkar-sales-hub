@@ -2,7 +2,8 @@ import { sections, site } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Search, MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { productsByCategory, type Product, formatCurrency } from "@/data/products";
 
 type HeaderProps = {
   onSearch: (q: string) => void;
@@ -10,6 +11,22 @@ type HeaderProps = {
 
 export default function Header({ onSearch }: HeaderProps) {
   const [q, setQ] = useState("");
+
+  const results = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (query.length < 2) return [] as (Product & { discounted: number })[];
+    const all: Product[] = ([] as Product[]).concat(
+      ...Object.values(productsByCategory)
+    );
+    return all
+      .filter((p) => p.name.toLowerCase().includes(query))
+      .map((p) => ({
+        ...p,
+        discounted: p.discountPercent
+          ? Math.round(p.price * (1 - p.discountPercent / 100))
+          : p.price,
+      }));
+  }, [q]);
 
   useEffect(() => {
     const timeout = setTimeout(() => onSearch(q), 250);
@@ -47,6 +64,42 @@ export default function Header({ onSearch }: HeaderProps) {
               onChange={(e) => setQ(e.target.value)}
               className="pl-9"
             />
+            {q.trim().length >= 2 && results.length > 0 && (
+              <div className="absolute left-0 right-0 top-full mt-2 z-50 rounded-lg border bg-background shadow-xl max-h-80 overflow-auto">
+                <ul role="listbox" className="divide-y">
+                  {results.slice(0, 8).map((p) => (
+                    <li key={p.id} role="option" className="p-3 hover:bg-accent/30">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={p.image}
+                          alt={`${p.name} thumbnail`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-12 w-12 rounded border object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium truncate">{p.name}</div>
+                          <div className="mt-0.5 text-xs text-muted-foreground flex items-center gap-2">
+                            {p.discountPercent ? (
+                              <span className="line-through">{formatCurrency(p.price)}</span>
+                            ) : null}
+                            <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
+                            {p.discountPercent ? (
+                              <span className="ml-auto text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded">-{p.discountPercent}%</span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                  {results.length > 8 && (
+                    <li className="p-2 text-xs text-muted-foreground text-center">
+                      Showing top 8 of {results.length} results
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
           </div>
           <Button asChild variant="secondary">
             <a href={`tel:${site.phone}`} aria-label="Call Sarkar Sales">
@@ -77,6 +130,42 @@ export default function Header({ onSearch }: HeaderProps) {
             onChange={(e) => setQ(e.target.value)}
             className="pl-9"
           />
+          {q.trim().length >= 2 && results.length > 0 && (
+            <div className="absolute left-0 right-0 top-full mt-2 z-50 rounded-lg border bg-background shadow-xl max-h-80 overflow-auto">
+              <ul role="listbox" className="divide-y">
+                {results.slice(0, 8).map((p) => (
+                  <li key={p.id} role="option" className="p-3 hover:bg-accent/30">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={p.image}
+                        alt={`${p.name} thumbnail`}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-12 w-12 rounded border object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">{p.name}</div>
+                        <div className="mt-0.5 text-xs text-muted-foreground flex items-center gap-2">
+                          {p.discountPercent ? (
+                            <span className="line-through">{formatCurrency(p.price)}</span>
+                          ) : null}
+                          <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
+                          {p.discountPercent ? (
+                            <span className="ml-auto text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded">-{p.discountPercent}%</span>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+                {results.length > 8 && (
+                  <li className="p-2 text-xs text-muted-foreground text-center">
+                    Showing top 8 of {results.length} results
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </header>
