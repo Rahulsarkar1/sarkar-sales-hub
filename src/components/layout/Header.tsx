@@ -64,7 +64,6 @@ export default function Header({ onSearch }: HeaderProps) {
           <a className="story-link" href={`#${sections.products}`}>Products</a>
           <a className="story-link" href={`#${sections.whyUs}`}>Why Us</a>
           <a className="story-link" href={`#${sections.reviews}`}>Reviews</a>
-          <a className="story-link" href={`#${sections.offers}`}>Offers</a>
           <a className="story-link" href={`#${sections.contact}`}>Contact</a>
         </nav>
 

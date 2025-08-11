@@ -140,7 +140,6 @@ function UiScaleCard() {
       </div>
       <div className="mt-4 text-sm text-muted-foreground">Tip: 16px is default. Increasing this scales most sizes proportionally.</div>
     </div>
-    </div>
   );
 }
 
