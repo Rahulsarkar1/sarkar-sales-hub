@@ -2,9 +2,10 @@ import { sections, site as defaultSite } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Search, MessageCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { productsByCategory, type Product, formatCurrency } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
+import { useLocalUi } from "@/context/LocalUiContext";
 
 type HeaderProps = {
   onSearch: (q: string) => void;
@@ -13,10 +14,13 @@ type HeaderProps = {
 export default function Header({ onSearch }: HeaderProps) {
   const [q, setQ] = useState("");
   const { settings } = useSiteSettings();
-  const siteName = settings?.site_name ?? defaultSite.name;
-  const siteTagline = settings?.tagline ?? defaultSite.tagline;
+  const { settings: localUi } = useLocalUi();
+  const siteName = localUi.siteName ?? settings?.site_name ?? defaultSite.name;
+  const siteTagline = localUi.tagline ?? settings?.tagline ?? defaultSite.tagline;
   const phone = settings?.phone ?? defaultSite.phone;
-  const whatsapp = settings?.whatsapp_number ?? defaultSite.whatsappNumber;
+  const whatsapp = localUi.social?.whatsapp ?? settings?.whatsapp_number ?? defaultSite.whatsappNumber;
+
+  const logo = localUi.logoDataUrl ?? null;
 
   const results = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -43,9 +47,13 @@ export default function Header({ onSearch }: HeaderProps) {
     <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b">
       <div className="container mx-auto flex items-center justify-between py-3 gap-4">
         <a href="#" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-md bg-primary/10 border border-border flex items-center justify-center" aria-hidden>
-            <span className="text-sm font-bold">SS</span>
-          </div>
+          {logo ? (
+            <img src={logo} alt={`${siteName} logo`} className="h-8 w-8 rounded-md border object-cover" />
+          ) : (
+            <div className="h-8 w-8 rounded-md bg-primary/10 border border-border flex items-center justify-center" aria-hidden>
+              <span className="text-sm font-bold">SS</span>
+            </div>
+          )}
           <div className="leading-tight">
             <div className="font-bold">{siteName}</div>
             <div className="text-xs text-muted-foreground">{siteTagline}</div>

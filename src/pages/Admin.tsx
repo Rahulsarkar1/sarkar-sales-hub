@@ -8,6 +8,7 @@ import { useSettings } from "@/context/SettingsContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { useLocalUi } from "@/context/LocalUiContext";
 
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
@@ -41,6 +42,7 @@ export default function Admin() {
         <div className="grid gap-6 max-w-2xl">
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <UiScaleCard />
+          <LocalUiCard />
         </div>
       </div>
     </main>
@@ -137,6 +139,141 @@ function UiScaleCard() {
         <div className="w-16 text-right text-sm"><span className="font-mono">{baseFontSize}px</span></div>
       </div>
       <div className="mt-4 text-sm text-muted-foreground">Tip: 16px is default. Increasing this scales most sizes proportionally.</div>
+    </div>
+    </div>
+  );
+}
+
+function LocalUiCard() {
+  const { settings, update, reset } = useLocalUi();
+  const [siteName, setSiteName] = useState(settings.siteName ?? "");
+  const [tagline, setTagline] = useState(settings.tagline ?? "");
+  const [facebook, setFacebook] = useState(settings.social?.facebook ?? "");
+  const [instagram, setInstagram] = useState(settings.social?.instagram ?? "");
+  const [whatsapp, setWhatsapp] = useState(settings.social?.whatsapp ?? "");
+  const [primary, setPrimary] = useState(settings.primary ?? "");
+  const [secondary, setSecondary] = useState(settings.secondary ?? "");
+  const [radius, setRadius] = useState<number>(typeof settings.radius === 'number' ? settings.radius : 12);
+  const [festiveEnabled, setFestiveEnabled] = useState<boolean>(!!settings.festiveEnabled);
+  const [festiveImageUrl, setFestiveImageUrl] = useState(settings.festiveImageUrl ?? "");
+  const [logoDataUrl, setLogoDataUrl] = useState<string | null>(settings.logoDataUrl ?? null);
+
+  function hexToHslString(hex: string) {
+    let r = 0, g = 0, b = 0;
+    const clean = hex.replace('#','');
+    if (clean.length === 3) {
+      r = parseInt(clean[0] + clean[0], 16);
+      g = parseInt(clean[1] + clean[1], 16);
+      b = parseInt(clean[2] + clean[2], 16);
+    } else if (clean.length === 6) {
+      r = parseInt(clean.substring(0,2), 16);
+      g = parseInt(clean.substring(2,4), 16);
+      b = parseInt(clean.substring(4,6), 16);
+    }
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h = 0, s = 0, l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch(max){
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return `${Math.round(h*360)} ${Math.round(s*100)}% ${Math.round(l*100)}%`;
+  }
+
+  const onLogoChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setLogoDataUrl(String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = () => {
+    update({
+      siteName,
+      tagline,
+      social: { facebook, instagram, whatsapp },
+      primary: primary ? (primary.startsWith('#') ? hexToHslString(primary) : primary) : undefined,
+      secondary: secondary ? (secondary.startsWith('#') ? hexToHslString(secondary) : secondary) : undefined,
+      radius,
+      festiveEnabled,
+      festiveImageUrl,
+      logoDataUrl,
+    });
+    alert('Local UI settings saved');
+  };
+
+  return (
+    <div className="p-4 rounded-lg border glass-card">
+      <h2 className="font-semibold mb-4">Local UI Controls</h2>
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label>Logo</Label>
+          <input type="file" accept="image/*" onChange={onLogoChange} />
+          {logoDataUrl ? <img src={logoDataUrl} alt="Logo preview" className="h-10 w-10 rounded border object-cover" /> : null}
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="local-site">Site name</Label>
+          <Input id="local-site" value={siteName} onChange={(e)=>setSiteName(e.target.value)} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="local-tagline">Tagline</Label>
+          <Input id="local-tagline" value={tagline} onChange={(e)=>setTagline(e.target.value)} />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="fb">Facebook URL</Label>
+            <Input id="fb" value={facebook} onChange={(e)=>setFacebook(e.target.value)} placeholder="https://facebook.com/..." />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="ig">Instagram URL</Label>
+            <Input id="ig" value={instagram} onChange={(e)=>setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="wa">WhatsApp Number</Label>
+            <Input id="wa" value={whatsapp} onChange={(e)=>setWhatsapp(e.target.value)} placeholder="91xxxxxxxxxx" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid gap-2">
+            <Label>Primary Color</Label>
+            <input type="color" value={primary && primary.startsWith('#') ? primary : '#000000'} onChange={(e)=>setPrimary(e.target.value)} />
+            <p className="text-xs text-muted-foreground">Accepts HEX or HSL string</p>
+          </div>
+          <div className="grid gap-2">
+            <Label>Secondary Color</Label>
+            <input type="color" value={secondary && secondary.startsWith('#') ? secondary : '#ffffff'} onChange={(e)=>setSecondary(e.target.value)} />
+            <p className="text-xs text-muted-foreground">Accepts HEX or HSL string</p>
+          </div>
+          <div className="grid gap-2">
+            <Label>Border Radius</Label>
+            <Slider value={[radius]} min={6} max={20} step={1} onValueChange={(v)=>setRadius(v[0])} />
+            <div className="text-xs text-muted-foreground"><span className="font-mono">{radius}px</span></div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between border-t pt-4">
+          <div>
+            <Label className="mb-1">Festive popup</Label>
+            <p className="text-xs text-muted-foreground">Enable and set an image URL</p>
+          </div>
+          <Switch checked={festiveEnabled} onCheckedChange={setFestiveEnabled} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="festive-local">Festive image URL</Label>
+          <Input id="festive-local" value={festiveImageUrl} onChange={(e)=>setFestiveImageUrl(e.target.value)} placeholder="https://... .jpg/.jpeg" />
+        </div>
+        <div className="flex items-center gap-2 pt-2">
+          <Button onClick={handleSave}>Save Local UI</Button>
+          <Button variant="outline" onClick={reset}>Reset</Button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,9 +3,9 @@ import Header from "@/components/layout/Header";
 import CategorySection from "@/components/sections/CategorySection";
 import WhyUs from "@/components/sections/WhyUs";
 import Testimonials from "@/components/sections/Testimonials";
-import Offers from "@/components/sections/Offers";
 import Contact from "@/components/sections/Contact";
 import StickyActions from "@/components/StickyActions";
+import FestivePopup from "@/components/FestivePopup";
 import { categories, productsByCategory, Product } from "@/data/products";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -44,12 +44,13 @@ export default function Index() {
           })}
         </script>
       </Helmet>
-      <div className="min-h-screen">
+      <div className="min-h-[80vh] md:min-h-screen">
         <Header onSearch={setQ} />
+        <FestivePopup />
 
-        <main>
+        <main className="pb-28">
           {/* Hero */}
-          <section className="relative overflow-hidden">
+          <section className="relative md:overflow-hidden overflow-visible">
             <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} aria-hidden />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Power You Can Trust</h1>
@@ -90,7 +91,6 @@ export default function Index() {
 
           <WhyUs />
           <Testimonials />
-          <Offers />
           <Contact />
         </main>
 
