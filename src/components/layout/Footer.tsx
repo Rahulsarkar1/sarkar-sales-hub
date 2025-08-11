@@ -1,11 +1,15 @@
-import { site } from "@/config/site";
+import { site as defaultSite } from "@/config/site";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 export default function Footer() {
+  const { settings } = useSiteSettings();
+  const siteName = (settings?.site_name ?? defaultSite.name).toUpperCase();
+  const whatsapp = settings?.whatsapp_number ?? defaultSite.whatsappNumber;
   return (
     <footer className="border-t mt-12" role="contentinfo">
       <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 gap-8">
         <section aria-labelledby="footer-brand" className="col-span-2 md:col-span-1">
-          <h2 id="footer-brand" className="text-xl font-bold">{site.name.toUpperCase()}</h2>
+          <h2 id="footer-brand" className="text-xl font-bold">{siteName}</h2>
           <p className="text-muted-foreground mt-2">Your trusted partner for all battery solutions</p>
         </section>
 
@@ -31,7 +35,7 @@ export default function Footer() {
               <a className="hover:underline" href="#" target="_blank" rel="noreferrer">Instagram</a>
             </li>
             <li>
-              <a className="hover:underline" href={`https://wa.me/${site.whatsappNumber}`} target="_blank" rel="noreferrer">WhatsApp</a>
+              <a className="hover:underline" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">WhatsApp</a>
             </li>
           </ul>
         </nav>

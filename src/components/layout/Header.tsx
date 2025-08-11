@@ -1,9 +1,10 @@
-import { sections, site } from "@/config/site";
+import { sections, site as defaultSite } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Search, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { productsByCategory, type Product, formatCurrency } from "@/data/products";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 type HeaderProps = {
   onSearch: (q: string) => void;
@@ -11,6 +12,11 @@ type HeaderProps = {
 
 export default function Header({ onSearch }: HeaderProps) {
   const [q, setQ] = useState("");
+  const { settings } = useSiteSettings();
+  const siteName = settings?.site_name ?? defaultSite.name;
+  const siteTagline = settings?.tagline ?? defaultSite.tagline;
+  const phone = settings?.phone ?? defaultSite.phone;
+  const whatsapp = settings?.whatsapp_number ?? defaultSite.whatsappNumber;
 
   const results = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -41,8 +47,8 @@ export default function Header({ onSearch }: HeaderProps) {
             <span className="text-sm font-bold">SS</span>
           </div>
           <div className="leading-tight">
-            <div className="font-bold">{site.name}</div>
-            <div className="text-xs text-muted-foreground">{site.tagline}</div>
+            <div className="font-bold">{siteName}</div>
+            <div className="text-xs text-muted-foreground">{siteTagline}</div>
           </div>
         </a>
 
@@ -102,13 +108,13 @@ export default function Header({ onSearch }: HeaderProps) {
             )}
           </div>
           <Button asChild variant="secondary">
-            <a href={`tel:${site.phone}`} aria-label="Call Sarkar Sales">
+            <a href={`tel:${phone}`} aria-label="Call Sarkar Sales">
               <Phone className="mr-1" /> Call
             </a>
           </Button>
           <Button asChild variant="hero">
             <a
-              href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent("Hello Sarkar Sales! I have a quick question.")}`}
+              href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello Sarkar Sales! I have a quick question.")}`}
               target="_blank"
               rel="noreferrer"
               aria-label="Chat on WhatsApp"

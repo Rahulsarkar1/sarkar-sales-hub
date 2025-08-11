@@ -2,27 +2,32 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/context/SettingsContext";
-
-const PASS_KEY = "sarkar-admin-pass";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 export default function Admin() {
-  const [pass, setPass] = useState("");
-  const [savedPass, setSavedPass] = useState<string | null>(null);
   const [authed, setAuthed] = useState(false);
+  const { settings, updateSettings } = useSiteSettings();
 
   useEffect(() => {
-    setSavedPass(localStorage.getItem(PASS_KEY) || "admin123");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setAuthed(!!session?.user);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => setAuthed(!!session?.user));
+    return () => subscription.unsubscribe();
   }, []);
 
   if (!authed) {
     return (
       <main className="min-h-screen flex items-center justify-center p-6">
-        <div className="w-full max-w-sm p-6 rounded-xl border glass-card">
-          <h1 className="text-xl font-bold mb-2">Admin Sign In</h1>
-          <p className="text-sm text-muted-foreground mb-4">Password protected area.</p>
-          <Input type="password" placeholder="Enter password" value={pass} onChange={(e) => setPass(e.target.value)} />
-          <Button className="mt-3 w-full" onClick={() => setAuthed(pass === savedPass)}>Sign In</Button>
+        <div className="w-full max-w-sm p-6 rounded-xl border glass-card text-center">
+          <h1 className="text-xl font-bold mb-2">Admin Sign In Required</h1>
+          <p className="text-sm text-muted-foreground mb-4">Please sign in to manage your site settings.</p>
+          <Button asChild className="w-full"><Link to="/auth">Go to Login</Link></Button>
         </div>
       </main>
     );
@@ -32,20 +37,84 @@ export default function Admin() {
     <main className="min-h-screen p-6">
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-4">Admin Portal</h1>
-        <p className="text-muted-foreground mb-6">This is a starter. Next step we will connect Supabase for full dynamic control (products, texts, colors, reviews, banners).</p>
+        <p className="text-muted-foreground mb-6">Update site-wide settings powered by Supabase.</p>
         <div className="grid gap-6 max-w-2xl">
-          <div className="p-4 rounded-lg border glass-card">
-            <h2 className="font-semibold mb-2">Change Password</h2>
-            <div className="flex gap-2">
-              <Input type="password" placeholder="New password" value={pass} onChange={(e) => setPass(e.target.value)} />
-              <Button onClick={() => { localStorage.setItem(PASS_KEY, pass); alert("Password updated"); }}>Save</Button>
-            </div>
-          </div>
-
+          <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <UiScaleCard />
         </div>
       </div>
     </main>
+  );
+}
+
+function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSave: (p: any) => Promise<Error | null>; }) {
+  const [siteName, setSiteName] = useState(settingsState?.site_name ?? "");
+  const [tagline, setTagline] = useState(settingsState?.tagline ?? "");
+  const [phone, setPhone] = useState(settingsState?.phone ?? "");
+  const [whatsapp, setWhatsapp] = useState(settingsState?.whatsapp_number ?? "");
+  const [festive, setFestive] = useState<boolean>(!!settingsState?.festive_enabled);
+  const [festiveImage, setFestiveImage] = useState(settingsState?.festive_image_url ?? "");
+
+  useEffect(() => {
+    setSiteName(settingsState?.site_name ?? "");
+    setTagline(settingsState?.tagline ?? "");
+    setPhone(settingsState?.phone ?? "");
+    setWhatsapp(settingsState?.whatsapp_number ?? "");
+    setFestive(!!settingsState?.festive_enabled);
+    setFestiveImage(settingsState?.festive_image_url ?? "");
+  }, [settingsState]);
+
+  const handleSave = async () => {
+    const err = await onSave({
+      site_name: siteName,
+      tagline,
+      phone,
+      whatsapp_number: whatsapp,
+      festive_enabled: festive,
+      festive_image_url: festiveImage,
+    });
+    if (err) alert(`Error: ${err.message}`);
+    else alert("Settings saved");
+  };
+
+  return (
+    <div className="p-4 rounded-lg border glass-card">
+      <h2 className="font-semibold mb-4">Site Settings</h2>
+      <div className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="siteName">Site name</Label>
+          <Input id="siteName" value={siteName} onChange={(e) => setSiteName(e.target.value)} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="tagline">Tagline</Label>
+          <Input id="tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="phone">Phone</Label>
+            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="whatsapp">WhatsApp Number</Label>
+            <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+          </div>
+        </div>
+        <div className="flex items-center justify-between border-t pt-4">
+          <div>
+            <Label className="mb-1">Festive popup</Label>
+            <p className="text-xs text-muted-foreground">Enable and set an image URL</p>
+          </div>
+          <Switch checked={festive} onCheckedChange={setFestive} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="festiveImage">Festive image URL</Label>
+          <Input id="festiveImage" value={festiveImage} onChange={(e) => setFestiveImage(e.target.value)} placeholder="https://..." />
+        </div>
+        <div className="pt-2">
+          <Button onClick={handleSave} className="w-full sm:w-auto">Save Settings</Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
