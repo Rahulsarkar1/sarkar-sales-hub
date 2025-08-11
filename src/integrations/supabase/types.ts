@@ -14,16 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      site_settings: {
+        Row: {
+          address: string | null
+          base_font_size: number | null
+          canonical_url: string | null
+          city: string | null
+          email: string | null
+          festive_enabled: boolean | null
+          festive_image_url: string | null
+          key: string
+          logo_url: string | null
+          map_embed_src: string | null
+          phone: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          site_name: string
+          tagline: string | null
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          address?: string | null
+          base_font_size?: number | null
+          canonical_url?: string | null
+          city?: string | null
+          email?: string | null
+          festive_enabled?: boolean | null
+          festive_image_url?: string | null
+          key?: string
+          logo_url?: string | null
+          map_embed_src?: string | null
+          phone?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          site_name?: string
+          tagline?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          address?: string | null
+          base_font_size?: number | null
+          canonical_url?: string | null
+          city?: string | null
+          email?: string | null
+          festive_enabled?: boolean | null
+          festive_image_url?: string | null
+          key?: string
+          logo_url?: string | null
+          map_embed_src?: string | null
+          phone?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          site_name?: string
+          tagline?: string | null
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +233,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
