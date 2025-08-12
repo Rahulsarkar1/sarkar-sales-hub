@@ -1,5 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
+export type ProductLite = {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  discountPercent?: number;
+};
+
 export type LocalUiSettings = {
   logoDataUrl?: string | null;
   siteName?: string;
@@ -14,6 +22,9 @@ export type LocalUiSettings = {
   radius?: number; // rem units in px number, will map to rem
   festiveEnabled?: boolean;
   festiveImageUrl?: string;
+  // Local catalog overrides
+  catalogCategories?: string[];
+  catalogProducts?: Record<string, ProductLite[]>;
 };
 
 const DEFAULTS: LocalUiSettings = {};

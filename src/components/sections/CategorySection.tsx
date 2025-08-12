@@ -1,6 +1,8 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
@@ -57,6 +59,23 @@ export default function CategorySection({
             <CarouselPrevious aria-label="Previous products" />
             <CarouselNext aria-label="Next products" />
           </Carousel>
+          <div className="mt-4 text-right">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm">View all</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>{title}</DialogTitle>
+                </DialogHeader>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {products.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </div>
     </section>

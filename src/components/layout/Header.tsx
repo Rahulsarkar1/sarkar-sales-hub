@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Search, MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { productsByCategory, type Product, formatCurrency } from "@/data/products";
+import { type Product, formatCurrency } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { useLocalUi } from "@/context/LocalUiContext";
+import { useCatalog } from "@/hooks/use-catalog";
+import ProductDetailsDialog from "@/components/ProductDetailsDialog";
 
 type HeaderProps = {
   onSearch: (q: string) => void;
@@ -22,6 +24,8 @@ export default function Header({ onSearch }: HeaderProps) {
 
   const logo = localUi.logoDataUrl ?? null;
 
+  const { productsByCategory } = useCatalog();
+
   const results = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (query.length < 2) return [] as (Product & { discounted: number })[];
@@ -36,7 +40,7 @@ export default function Header({ onSearch }: HeaderProps) {
           ? Math.round(p.price * (1 - p.discountPercent / 100))
           : p.price,
       }));
-  }, [q]);
+  }, [q, productsByCategory]);
 
   useEffect(() => {
     const timeout = setTimeout(() => onSearch(q), 250);
@@ -82,7 +86,8 @@ export default function Header({ onSearch }: HeaderProps) {
                 <ul role="listbox" className="divide-y">
                   {results.slice(0, 8).map((p) => (
                     <li key={p.id} role="option" className="p-3 hover:bg-accent/30">
-                      <div className="flex items-center gap-3">
+                    <ProductDetailsDialog product={p}>
+                      <div className="flex items-center gap-3 cursor-pointer">
                         <img
                           src={p.image}
                           alt={`${p.name} thumbnail`}
@@ -98,11 +103,14 @@ export default function Header({ onSearch }: HeaderProps) {
                             ) : null}
                             <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
                             {p.discountPercent ? (
-                              <span className="ml-auto text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded">-{p.discountPercent}%</span>
+                              <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                                -{p.discountPercent}%
+                              </span>
                             ) : null}
                           </div>
                         </div>
                       </div>
+                    </ProductDetailsDialog>
                     </li>
                   ))}
                   {results.length > 8 && (
@@ -148,27 +156,31 @@ export default function Header({ onSearch }: HeaderProps) {
               <ul role="listbox" className="divide-y">
                 {results.slice(0, 8).map((p) => (
                   <li key={p.id} role="option" className="p-3 hover:bg-accent/30">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={p.image}
-                        alt={`${p.name} thumbnail`}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-12 w-12 rounded border object-cover"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium truncate">{p.name}</div>
-                        <div className="mt-0.5 text-xs text-muted-foreground flex items-center gap-2">
-                          {p.discountPercent ? (
-                            <span className="line-through">{formatCurrency(p.price)}</span>
-                          ) : null}
-                          <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
-                          {p.discountPercent ? (
-                            <span className="ml-auto text-xs bg-accent text-accent-foreground px-1.5 py-0.5 rounded">-{p.discountPercent}%</span>
-                          ) : null}
+                    <ProductDetailsDialog product={p}>
+                      <div className="flex items-center gap-3 cursor-pointer">
+                        <img
+                          src={p.image}
+                          alt={`${p.name} thumbnail`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-12 w-12 rounded border object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium truncate">{p.name}</div>
+                          <div className="mt-0.5 text-xs text-muted-foreground flex items-center gap-2">
+                            {p.discountPercent ? (
+                              <span className="line-through">{formatCurrency(p.price)}</span>
+                            ) : null}
+                            <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
+                            {p.discountPercent ? (
+                              <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                                -{p.discountPercent}%
+                              </span>
+                            ) : null}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </ProductDetailsDialog>
                   </li>
                 ))}
                 {results.length > 8 && (

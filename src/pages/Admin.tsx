@@ -43,6 +43,7 @@ export default function Admin() {
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <UiScaleCard />
           <LocalUiCard />
+          <LocalCatalogCard />
         </div>
       </div>
     </main>
@@ -272,6 +273,104 @@ function LocalUiCard() {
           <Button onClick={handleSave}>Save Local UI</Button>
           <Button variant="outline" onClick={reset}>Reset</Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function LocalCatalogCard() {
+  const { settings, update } = useLocalUi();
+  const [segments, setSegments] = useState<string[]>(settings.catalogCategories ?? []);
+  const [selected, setSelected] = useState<string>(segments[0] ?? "");
+  const [productsBySegment, setProductsBySegment] = useState<Record<string, any[]>>(settings.catalogProducts ?? {});
+
+  useEffect(() => {
+    if (!selected && segments.length) setSelected(segments[0]);
+  }, [segments, selected]);
+
+  const addSegment = () => {
+    const name = prompt('New segment name');
+    if (!name) return;
+    if (segments.includes(name)) return alert('Segment exists');
+    setSegments([...segments, name]);
+  };
+  const removeSegment = (name: string) => {
+    const next = segments.filter((s) => s !== name);
+    setSegments(next);
+    const copy = { ...productsBySegment };
+    delete copy[name];
+    setProductsBySegment(copy);
+    if (selected === name) setSelected(next[0] ?? "");
+  };
+
+  const products = productsBySegment[selected] ?? [];
+
+  const updateProduct = (idx: number, patch: any) => {
+    const list = [...products];
+    list[idx] = { ...list[idx], ...patch };
+    setProductsBySegment({ ...productsBySegment, [selected]: list });
+  };
+  const addProduct = () => {
+    const list = [...products, { id: crypto.randomUUID(), name: '', image: '', price: 0, discountPercent: 0 }];
+    setProductsBySegment({ ...productsBySegment, [selected]: list });
+  };
+  const removeProduct = (idx: number) => {
+    const list = products.filter((_, i) => i !== idx);
+    setProductsBySegment({ ...productsBySegment, [selected]: list });
+  };
+
+  const saveAll = () => {
+    update({ catalogCategories: segments, catalogProducts: productsBySegment });
+    alert('Local catalog saved');
+  };
+
+  return (
+    <div className="p-4 rounded-lg border glass-card">
+      <h2 className="font-semibold mb-2">Local Catalog (beta)</h2>
+      <p className="text-sm text-muted-foreground mb-4">Manage segments and products locally. Later we can move this to Supabase.</p>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="md:col-span-1">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium">Segments</h3>
+            <Button size="sm" variant="outline" onClick={addSegment}>Add</Button>
+          </div>
+          <ul className="space-y-1">
+            {segments.map((s) => (
+              <li key={s} className={`flex items-center justify-between rounded border px-2 py-1 text-sm ${selected===s?'bg-accent/50':''}`}>
+                <button className="text-left flex-1" onClick={()=>setSelected(s)}>{s}</button>
+                <button className="text-destructive" onClick={()=>removeSegment(s)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="md:col-span-2">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-medium">Products in: <span className="font-semibold">{selected || '—'}</span></h3>
+            <Button size="sm" onClick={addProduct} disabled={!selected}>Add Product</Button>
+          </div>
+          {selected ? (
+            <div className="space-y-3">
+              {products.map((p: any, idx: number) => (
+                <div key={p.id} className="grid grid-cols-1 md:grid-cols-6 gap-2 border rounded p-2">
+                  <Input placeholder="Name" value={p.name} onChange={(e)=>updateProduct(idx,{name:e.target.value})} className="md:col-span-2" />
+                  <Input placeholder="Image URL" value={p.image} onChange={(e)=>updateProduct(idx,{image:e.target.value})} className="md:col-span-2" />
+                  <Input placeholder="Price" type="number" value={p.price} onChange={(e)=>updateProduct(idx,{price:Number(e.target.value)})} />
+                  <Input placeholder="Discount %" type="number" value={p.discountPercent ?? 0} onChange={(e)=>updateProduct(idx,{discountPercent:Number(e.target.value)})} />
+                  <div className="md:col-span-6 flex justify-end">
+                    <Button variant="destructive" size="sm" onClick={()=>removeProduct(idx)}>Remove</Button>
+                  </div>
+                </div>
+              ))}
+              {products.length===0 && <p className="text-sm text-muted-foreground">No products yet.</p>}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Select a segment to manage products.</p>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-end mt-4 gap-2">
+        <Button variant="outline" onClick={()=>{ setSegments(settings.catalogCategories ?? []); setProductsBySegment(settings.catalogProducts ?? {}); }}>Reset</Button>
+        <Button onClick={saveAll}>Save</Button>
       </div>
     </div>
   );
