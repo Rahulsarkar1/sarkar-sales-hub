@@ -2,11 +2,39 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import LeadModal from "@/components/LeadModal";
 import { type Product, formatCurrency } from "@/data/products";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ProductDetailsDialog({ product, children }: { product: Product; children: React.ReactNode }) {
   const discounted = product.discountPercent
     ? Math.round(product.price * (1 - product.discountPercent / 100))
     : product.price;
+
+  const { data: specs = [], isLoading: specsLoading } = useQuery({
+    queryKey: ["product_specs", product.id],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("product_specs")
+        .select("id,label,value,sort_order")
+        .eq("product_id", product.id)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: details } = useQuery({
+    queryKey: ["product_details", product.id],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("products")
+        .select("description")
+        .eq("id", product.id)
+        .single();
+      if (error) throw error;
+      return data as { description: string | null };
+    },
+  });
 
   return (
     <Dialog>
@@ -55,13 +83,32 @@ export default function ProductDetailsDialog({ product, children }: { product: P
             </div>
           </div>
 
+          {details?.description && (
+            <div className="grid gap-1">
+              <h4 className="font-semibold">Description</h4>
+              <p className="text-sm text-muted-foreground whitespace-pre-line">{details.description}</p>
+            </div>
+          )}
+
           <div className="grid gap-1">
             <h4 className="font-semibold">Specifications</h4>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-              <li>Brand-certified product with warranty</li>
-              <li>Professional installation and support</li>
-              <li>Fast delivery available in your area</li>
-            </ul>
+            {specsLoading ? (
+              <div className="text-sm text-muted-foreground">Loading…</div>
+            ) : specs.length > 0 ? (
+              <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+                {specs.map((s: any) => (
+                  <li key={s.id}>
+                    <span className="font-medium text-foreground">{s.label}:</span> {s.value}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+                <li>Brand-certified product with warranty</li>
+                <li>Professional installation and support</li>
+                <li>Fast delivery available in your area</li>
+              </ul>
+            )}
           </div>
 
           <LeadModal productName={product.name}>

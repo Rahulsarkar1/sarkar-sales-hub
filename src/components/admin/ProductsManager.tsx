@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -33,7 +34,7 @@ export default function ProductsManager() {
       if (!selected) return [];
       const { data, error } = await (supabase as any)
         .from("products")
-        .select("id,name,image_url,price_mrp,discount_percent,sort_order,visible")
+        .select("id,name,image_url,price_mrp,discount_percent,sort_order,visible,description")
         .eq("segment_id", selected)
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -47,7 +48,10 @@ export default function ProductsManager() {
       const { error } = await (supabase as any).from("products").insert(payload);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products", selected] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["products", selected] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    },
   });
 
   const updateMut = useMutation({
@@ -55,7 +59,10 @@ export default function ProductsManager() {
       const { error } = await (supabase as any).from("products").update(patch).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products", selected] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["products", selected] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    },
   });
 
   const deleteMut = useMutation({
@@ -63,10 +70,13 @@ export default function ProductsManager() {
       const { error } = await (supabase as any).from("products").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products", selected] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["products", selected] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    },
   });
 
-  const [newProd, setNewProd] = useState({ name: "", image_url: "", price_mrp: 0, discount_percent: 0, sort_order: 0, visible: true });
+  const [newProd, setNewProd] = useState({ name: "", image_url: "", description: "", price_mrp: 0, discount_percent: 0, sort_order: 0, visible: true });
 
   const segmentOptions = useMemo(() => segments.map((s:any) => ({ id: s.id, name: s.name })), [segments]);
 
@@ -91,6 +101,7 @@ export default function ProductsManager() {
             <Input placeholder="Image URL" value={newProd.image_url} onChange={(e)=>setNewProd({...newProd, image_url:e.target.value})} className="md:col-span-2" />
             <Input type="number" placeholder="MRP" value={newProd.price_mrp} onChange={(e)=>setNewProd({...newProd, price_mrp:Number(e.target.value)})} />
             <Input type="number" placeholder="Discount %" value={newProd.discount_percent} onChange={(e)=>setNewProd({...newProd, discount_percent:Number(e.target.value)})} />
+            <Textarea placeholder="Description (optional)" value={newProd.description} onChange={(e)=>setNewProd({...newProd, description:e.target.value})} className="md:col-span-6" rows={3} />
             <div className="flex items-center justify-between md:col-span-6">
               <div className="flex items-center gap-2">
                 <Label>Sort</Label>
@@ -129,6 +140,7 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
   const [disc, setDisc] = useState<number>(product.discount_percent || 0);
   const [sort, setSort] = useState<number>(product.sort_order || 0);
   const [visible, setVisible] = useState<boolean>(!!product.visible);
+  const [desc, setDesc] = useState<string>(product.description || "");
   const [showSpecs, setShowSpecs] = useState(false);
 
   return (
@@ -138,6 +150,7 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
         <Input placeholder="Image URL" value={image} onChange={(e)=>setImage(e.target.value)} className="md:col-span-2" />
         <Input type="number" placeholder="MRP" value={mrp} onChange={(e)=>setMrp(Number(e.target.value))} />
         <Input type="number" placeholder="Discount %" value={disc} onChange={(e)=>setDisc(Number(e.target.value))} />
+        <Textarea placeholder="Description (optional)" value={desc} onChange={(e)=>setDesc(e.target.value)} className="md:col-span-6" rows={3} />
         <div className="flex items-center justify-between md:col-span-6">
           <div className="flex items-center gap-2">
             <Label>Sort</Label>
@@ -148,7 +161,7 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, price_mrp: mrp, discount_percent: disc, sort_order: sort, visible })}>Save</Button>
+            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, description: desc, price_mrp: mrp, discount_percent: disc, sort_order: sort, visible })}>Save</Button>
             <Button size="sm" onClick={()=>setShowSpecs((v)=>!v)} variant="secondary">{showSpecs? 'Hide Specs':'Specs'}</Button>
             <Button size="sm" variant="destructive" onClick={onDelete}>Delete</Button>
           </div>

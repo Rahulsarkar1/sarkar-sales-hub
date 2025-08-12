@@ -52,6 +52,7 @@ export type Database = {
       products: {
         Row: {
           created_at: string
+          description: string | null
           discount_percent: number
           id: string
           image_url: string | null
@@ -65,6 +66,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          description?: string | null
           discount_percent?: number
           id?: string
           image_url?: string | null
@@ -78,6 +80,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          description?: string | null
           discount_percent?: number
           id?: string
           image_url?: string | null
