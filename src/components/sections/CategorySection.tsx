@@ -2,7 +2,9 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
@@ -19,6 +21,7 @@ export default function CategorySection({
   products: Product[];
   accent: "exide" | "car" | "bike" | "microtek";
 }) {
+  const isMobile = useIsMobile();
   const slides = chunk(products, 3);
 
   const accentHue =
@@ -44,37 +47,67 @@ export default function CategorySection({
             }}
             aria-hidden
           />
-          <Carousel orientation="vertical" className="relative">
-            <CarouselContent className="h-[560px]">
-              {slides.map((group, idx) => (
-                <CarouselItem key={idx} className="basis-full">
-                  <div className="grid grid-cols-1 gap-4">
-                    {group.map((p) => (
+          {/* On mobile: remove fixed height and avoid trapping scroll by not forcing vertical carousel height */}
+          {!isMobile ? (
+            <Carousel orientation="vertical" className="relative">
+              <CarouselContent className="h-[560px]">
+                {slides.map((group, idx) => (
+                  <CarouselItem key={idx} className="basis-full">
+                    <div className="grid grid-cols-1 gap-4">
+                      {group.map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                      ))}
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious aria-label="Previous products" />
+              <CarouselNext aria-label="Next products" />
+            </Carousel>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              {(products.slice(0, 3)).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          )}
+          <div className="mt-4 text-right">
+            {/* Mobile: Drawer to avoid fullscreen dialog scroll lock */}
+            <div className="inline-block md:hidden">
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="ghost" size="sm">View all</Button>
+                </DrawerTrigger>
+                <DrawerContent className="max-h-[85vh] overflow-y-auto">
+                  <DrawerHeader className="text-left">
+                    <DrawerTitle>{title}</DrawerTitle>
+                  </DrawerHeader>
+                  <div className="px-4 pb-6 grid grid-cols-1 gap-4">
+                    {products.map((p) => (
                       <ProductCard key={p.id} product={p} />
                     ))}
                   </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious aria-label="Previous products" />
-            <CarouselNext aria-label="Next products" />
-          </Carousel>
-          <div className="mt-4 text-right">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="sm">View all</Button>
-              </DialogTrigger>
-              <DialogContent className="w-[92vw] max-w-[92vw] md:max-w-3xl max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>{title}</DialogTitle>
-                </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                  ))}
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DrawerContent>
+              </Drawer>
+            </div>
+            {/* Desktop: keep dialog with capped size and internal scroll */}
+            <div className="hidden md:inline-block">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm">View all</Button>
+                </DialogTrigger>
+                <DialogContent className="w-[92vw] max-w-3xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.map((p) => (
+                      <ProductCard key={p.id} product={p} />
+                    ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       </div>

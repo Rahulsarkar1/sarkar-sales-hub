@@ -14,6 +14,121 @@ export type Database = {
   }
   public: {
     Tables: {
+      product_specs: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          product_id: string
+          sort_order: number
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          product_id: string
+          sort_order?: number
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          product_id?: string
+          sort_order?: number
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_specs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          created_at: string
+          discount_percent: number
+          id: string
+          image_url: string | null
+          name: string
+          price_exchange_mrp: number | null
+          price_mrp: number
+          segment_id: string
+          sort_order: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          image_url?: string | null
+          name: string
+          price_exchange_mrp?: number | null
+          price_mrp: number
+          segment_id: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          image_url?: string | null
+          name?: string
+          price_exchange_mrp?: number | null
+          price_mrp?: number
+          segment_id?: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      segments: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          name: string
+          sort_order: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null

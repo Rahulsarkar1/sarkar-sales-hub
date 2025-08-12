@@ -1,3 +1,4 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import LeadModal from "@/components/LeadModal";
 import { type Product, formatCurrency } from "@/data/products";
@@ -24,7 +25,7 @@ export default function ProductDetailsDialog({ product, children }: { product: P
           />
 
           <div className="space-y-2">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               {product.discountPercent ? (
                 <span className="text-sm text-muted-foreground line-through">
                   {formatCurrency(product.price)}
@@ -32,7 +33,7 @@ export default function ProductDetailsDialog({ product, children }: { product: P
               ) : null}
               <span className="text-base font-semibold">{formatCurrency(discounted)}</span>
               {product.discountPercent ? (
-                <span className="inline-flex items-center shrink-0 rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5">
+                <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground font-bold px-2 py-0.5 text-[11px] md:text-xs">
                   -{product.discountPercent}%
                 </span>
               ) : null}
