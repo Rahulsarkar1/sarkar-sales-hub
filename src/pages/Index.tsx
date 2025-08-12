@@ -6,25 +6,34 @@ import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import StickyActions from "@/components/StickyActions";
 import FestivePopup from "@/components/FestivePopup";
-import { categories, productsByCategory, Product } from "@/data/products";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { sections, site } from "@/config/site";
+import { useCatalog } from "@/hooks/use-catalog";
+import type { Product } from "@/data/products";
 
 export default function Index() {
   const [q, setQ] = useState("");
+  const { categoriesList, productsByCategory } = useCatalog();
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (!query) return productsByCategory;
-    const out: typeof productsByCategory = { ...productsByCategory } as any;
-    (categories as readonly string[]).forEach((c) => {
-      out[c as keyof typeof productsByCategory] = productsByCategory[
-        c as keyof typeof productsByCategory
-      ].filter((p: Product) => p.name.toLowerCase().includes(query));
+    const out: Record<string, Product[]> = {};
+    (categoriesList as readonly string[]).forEach((c) => {
+      const list = productsByCategory[c] ?? [];
+      out[c] = list.filter((p: Product) => p.name.toLowerCase().includes(query));
     });
     return out;
-  }, [q]);
+  }, [q, categoriesList, productsByCategory]);
+
+  const accentFor = (name: string) => {
+    const n = name.toLowerCase();
+    if (n.includes("microtek")) return "microtek" as const;
+    if (n.includes("car")) return "car" as const;
+    if (n.includes("bike")) return "bike" as const;
+    return "exide" as const;
+  };
 
   return (
     <HelmetProvider>
@@ -68,26 +77,14 @@ export default function Index() {
 
           {/* Products */}
           <div id={sections.products} />
-          <CategorySection
-            title="Exide Home/Inverter Batteries"
-            products={filtered["Exide Home/Inverter Batteries"]}
-            accent="exide"
-          />
-          <CategorySection
-            title="Microtek Inverters"
-            products={filtered["Microtek Inverters"]}
-            accent="microtek"
-          />
-          <CategorySection
-            title="Car Batteries"
-            products={filtered["Car Batteries"]}
-            accent="car"
-          />
-          <CategorySection
-            title="Bike Batteries"
-            products={filtered["Bike Batteries"]}
-            accent="bike"
-          />
+          {categoriesList.map((c) => (
+            <CategorySection
+              key={c}
+              title={c}
+              products={filtered[c] ?? []}
+              accent={accentFor(c)}
+            />
+          ))}
 
           <WhyUs />
           <Testimonials />

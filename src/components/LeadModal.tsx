@@ -36,7 +36,7 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[92vw] max-w-[92vw] sm:max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Quick Enquiry</DialogTitle>
           <DialogDescription>
@@ -76,12 +76,13 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
               Call Now
             </a>
           </Button>
-          <div className="flex gap-2">
-            <Button variant="outline" disabled={!canSubmit} onClick={() => window.location.assign(makeWhatsAppUrl())}>
-              Send on WhatsApp
-            </Button>
-            <Button variant="default" disabled={!canSubmit} onClick={() => alert("Thanks! We'll reach out shortly.")}>Submit</Button>
-          </div>
+          <Button
+            variant="default"
+            disabled={!canSubmit}
+            onClick={() => window.location.assign(makeWhatsAppUrl())}
+          >
+            Submit
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

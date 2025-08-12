@@ -22,7 +22,7 @@ export default function ProductCard({ product }: { product: Product }) {
               decoding="async"
               className="w-28 h-28 object-cover rounded-md border"
             />
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <h3 className="font-semibold leading-snug mb-1">{product.name}</h3>
               <div className="flex items-center gap-2 mb-2">
                 {product.discountPercent ? (
@@ -31,7 +31,7 @@ export default function ProductCard({ product }: { product: Product }) {
                       {formatCurrency(product.price)}
                     </span>
                     <span className="font-bold">{formatCurrency(discounted)}</span>
-                    <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                    <span className="inline-flex items-center shrink-0 rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5">
                       -{product.discountPercent}%
                     </span>
                   </>

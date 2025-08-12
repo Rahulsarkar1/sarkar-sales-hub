@@ -103,7 +103,7 @@ export default function Header({ onSearch }: HeaderProps) {
                             ) : null}
                             <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
                             {p.discountPercent ? (
-                              <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                              <span className="inline-flex items-center shrink-0 rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5">
                                 -{p.discountPercent}%
                               </span>
                             ) : null}
@@ -173,7 +173,7 @@ export default function Header({ onSearch }: HeaderProps) {
                             ) : null}
                             <span className="font-semibold text-foreground">{formatCurrency(p.discounted)}</span>
                             {p.discountPercent ? (
-                              <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                              <span className="inline-flex items-center shrink-0 rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5">
                                 -{p.discountPercent}%
                               </span>
                             ) : null}

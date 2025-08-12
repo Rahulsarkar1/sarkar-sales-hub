@@ -10,7 +10,7 @@ export default function ProductDetailsDialog({ product, children }: { product: P
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="w-[92vw] md:w-auto max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">{product.name}</DialogTitle>
         </DialogHeader>
@@ -32,7 +32,7 @@ export default function ProductDetailsDialog({ product, children }: { product: P
               ) : null}
               <span className="text-base font-semibold">{formatCurrency(discounted)}</span>
               {product.discountPercent ? (
-                <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5 ml-2">
+                <span className="inline-flex items-center shrink-0 rounded-full bg-destructive text-destructive-foreground text-sm md:text-xs font-bold px-2.5 py-0.5">
                   -{product.discountPercent}%
                 </span>
               ) : null}

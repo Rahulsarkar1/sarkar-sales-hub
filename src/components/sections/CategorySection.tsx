@@ -64,7 +64,7 @@ export default function CategorySection({
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm">View all</Button>
               </DialogTrigger>
-              <DialogContent className="max-w-3xl">
+              <DialogContent className="w-[92vw] max-w-[92vw] md:max-w-3xl max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
