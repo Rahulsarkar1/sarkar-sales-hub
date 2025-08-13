@@ -34,7 +34,7 @@ export default function ProductsManager() {
       if (!selected) return [];
       const { data, error } = await (supabase as any)
         .from("products")
-        .select("id,name,image_url,price_mrp,discount_percent,sort_order,visible,description")
+        .select("id,name,image_url,price_mrp,price_exchange_mrp,price_without_exchange,discount_percent,sort_order,visible,description")
         .eq("segment_id", selected)
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -76,7 +76,7 @@ export default function ProductsManager() {
     },
   });
 
-  const [newProd, setNewProd] = useState({ name: "", image_url: "", description: "", price_mrp: 0, discount_percent: 0, sort_order: 0, visible: true });
+  const [newProd, setNewProd] = useState({ name: "", image_url: "", description: "", price_mrp: 0, price_exchange_mrp: 0, price_without_exchange: 0, discount_percent: 0, sort_order: 0, visible: true });
 
   const segmentOptions = useMemo(() => segments.map((s:any) => ({ id: s.id, name: s.name })), [segments]);
 

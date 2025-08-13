@@ -19,6 +19,8 @@ export type SiteSettings = {
   base_font_size: number | null;
   festive_enabled: boolean | null;
   festive_image_url: string | null;
+  hero_title: string | null;
+  hero_subtitle: string | null;
 };
 
 interface SiteSettingsContextValue {
@@ -58,6 +60,16 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
       document.documentElement.style.fontSize = `${settings.base_font_size}px`;
     }
   }, [settings?.base_font_size]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (settings?.primary_color) {
+      root.style.setProperty("--primary", settings.primary_color);
+    }
+    if (settings?.secondary_color) {
+      root.style.setProperty("--secondary", settings.secondary_color);
+    }
+  }, [settings?.primary_color, settings?.secondary_color]);
 
   const updateSettings = async (patch: Partial<SiteSettings>) => {
     const next = { ...(settings ?? { key: "default" }), ...patch } as SiteSettings;

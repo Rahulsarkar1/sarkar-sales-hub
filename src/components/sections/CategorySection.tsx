@@ -16,10 +16,12 @@ export default function CategorySection({
   title,
   products,
   accent,
+  fullProducts,
 }: {
   title: string;
   products: Product[];
   accent: "exide" | "car" | "bike" | "microtek";
+  fullProducts?: Product[];
 }) {
   const isMobile = useIsMobile();
   const slides = chunk(products, 3);
@@ -83,7 +85,7 @@ export default function CategorySection({
                     <DrawerTitle>{title}</DrawerTitle>
                   </DrawerHeader>
                   <div className="px-4 pb-6 grid grid-cols-1 gap-4">
-                    {products.map((p) => (
+                    {(fullProducts ?? products).map((p) => (
                       <ProductCard key={p.id} product={p} />
                     ))}
                   </div>
@@ -101,7 +103,7 @@ export default function CategorySection({
                     <DialogTitle>{title}</DialogTitle>
                   </DialogHeader>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {products.map((p) => (
+                    {(fullProducts ?? products).map((p) => (
                       <ProductCard key={p.id} product={p} />
                     ))}
                   </div>

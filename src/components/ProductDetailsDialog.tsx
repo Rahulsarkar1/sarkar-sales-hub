@@ -28,11 +28,11 @@ export default function ProductDetailsDialog({ product, children }: { product: P
     queryFn: async () => {
       const { data, error } = await (supabase as any)
         .from("products")
-        .select("description")
+        .select("description,price_mrp,price_exchange_mrp,price_without_exchange")
         .eq("id", product.id)
         .single();
       if (error) throw error;
-      return data as { description: string | null };
+      return data as { description: string | null; price_mrp: number | null; price_exchange_mrp: number | null; price_without_exchange: number | null };
     },
   });
 
@@ -47,39 +47,25 @@ export default function ProductDetailsDialog({ product, children }: { product: P
           <img
             src={product.image}
             alt={`${product.name} large image`}
-            className="w-full h-48 object-cover rounded-md border"
+            className="w-full max-h-[60vh] object-contain rounded-md border bg-muted"
             loading="lazy"
             decoding="async"
           />
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-3 flex-wrap">
-              {product.discountPercent ? (
-                <span className="text-sm text-muted-foreground line-through">
-                  {formatCurrency(product.price)}
-                </span>
-              ) : null}
-              <span className="text-base font-semibold">{formatCurrency(discounted)}</span>
-              {product.discountPercent ? (
-                <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground font-bold px-2 py-0.5 text-[11px] md:text-xs">
-                  -{product.discountPercent}%
-                </span>
-              ) : null}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Prices shown are inclusive of standard offers. Contact us for exact quote.
-            </div>
-          </div>
-
+          {/* Price breakdown */}
           <div className="grid gap-1">
             <h4 className="font-semibold">Prices</h4>
             <div className="flex items-center justify-between text-sm">
-              <span>With battery exchange</span>
-              <span className="font-medium">{formatCurrency(discounted)}</span>
+              <span>MRP</span>
+              <span className="font-medium">{formatCurrency(details?.price_mrp ?? product.price)}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span>Without battery exchange (MRP)</span>
-              <span className="font-medium">{formatCurrency(product.price)}</span>
+              <span>With battery exchange</span>
+              <span className="font-medium">{details?.price_exchange_mrp != null ? formatCurrency(details.price_exchange_mrp) : '—'}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span>Without battery exchange</span>
+              <span className="font-medium">{details?.price_without_exchange != null ? formatCurrency(details.price_without_exchange) : formatCurrency(details?.price_mrp ?? product.price)}</span>
             </div>
           </div>
 

@@ -11,10 +11,12 @@ import { Button } from "@/components/ui/button";
 import { sections, site } from "@/config/site";
 import { useCatalog } from "@/hooks/use-catalog";
 import type { Product } from "@/data/products";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 export default function Index() {
   const [q, setQ] = useState("");
   const { categoriesList, productsByCategory } = useCatalog();
+  const { settings } = useSiteSettings();
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -35,6 +37,8 @@ export default function Index() {
     return "exide" as const;
   };
 
+  const heroTitle = settings?.hero_title ?? "Power You Can Trust";
+  const heroSubtitle = settings?.hero_subtitle ?? "Exide home/inverter batteries, car & bike batteries, and Microtek inverters with fast delivery, expert installation, and the best prices.";
   return (
     <HelmetProvider>
       <Helmet>
@@ -62,8 +66,8 @@ export default function Index() {
           <section className="relative md:overflow-hidden overflow-visible">
             <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} aria-hidden />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Power You Can Trust</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mb-6">Exide home/inverter batteries, car & bike batteries, and Microtek inverters with fast delivery, expert installation, and the best prices.</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{heroTitle}</h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mb-6">{heroSubtitle}</p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" asChild>
                   <a href={`#${sections.products}`}>Browse Products</a>
@@ -83,6 +87,7 @@ export default function Index() {
               title={c}
               products={filtered[c] ?? []}
               accent={accentFor(c)}
+              fullProducts={productsByCategory[c] ?? []}
             />
           ))}
 

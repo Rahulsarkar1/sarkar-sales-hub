@@ -59,6 +59,7 @@ export type Database = {
           name: string
           price_exchange_mrp: number | null
           price_mrp: number
+          price_without_exchange: number | null
           segment_id: string
           sort_order: number
           updated_at: string
@@ -73,6 +74,7 @@ export type Database = {
           name: string
           price_exchange_mrp?: number | null
           price_mrp: number
+          price_without_exchange?: number | null
           segment_id: string
           sort_order?: number
           updated_at?: string
@@ -87,6 +89,7 @@ export type Database = {
           name?: string
           price_exchange_mrp?: number | null
           price_mrp?: number
+          price_without_exchange?: number | null
           segment_id?: string
           sort_order?: number
           updated_at?: string
@@ -141,6 +144,8 @@ export type Database = {
           email: string | null
           festive_enabled: boolean | null
           festive_image_url: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
           key: string
           logo_url: string | null
           map_embed_src: string | null
@@ -160,6 +165,8 @@ export type Database = {
           email?: string | null
           festive_enabled?: boolean | null
           festive_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null
@@ -179,6 +186,8 @@ export type Database = {
           email?: string | null
           festive_enabled?: boolean | null
           festive_image_url?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null

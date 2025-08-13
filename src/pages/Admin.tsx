@@ -38,8 +38,15 @@ export default function Admin() {
   return (
     <main className="min-h-screen p-6">
       <div className="container mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Admin Portal</h1>
-        <p className="text-muted-foreground mb-6">Update site-wide settings powered by Supabase.</p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold">Admin Portal</h1>
+            <p className="text-muted-foreground">Update site-wide settings powered by Supabase.</p>
+          </div>
+          <Button asChild variant="secondary" size="sm">
+            <Link to="/">↩️ Return</Link>
+          </Button>
+        </div>
         <div className="grid gap-6 max-w-5xl">
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <UiScaleCard />
@@ -54,6 +61,10 @@ export default function Admin() {
 function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSave: (p: any) => Promise<Error | null>; }) {
   const [siteName, setSiteName] = useState(settingsState?.site_name ?? "");
   const [tagline, setTagline] = useState(settingsState?.tagline ?? "");
+  const [heroTitle, setHeroTitle] = useState(settingsState?.hero_title ?? "");
+  const [heroSubtitle, setHeroSubtitle] = useState(settingsState?.hero_subtitle ?? "");
+  const [primaryColor, setPrimaryColor] = useState(settingsState?.primary_color ?? "");
+  const [secondaryColor, setSecondaryColor] = useState(settingsState?.secondary_color ?? "");
   const [phone, setPhone] = useState(settingsState?.phone ?? "");
   const [whatsapp, setWhatsapp] = useState(settingsState?.whatsapp_number ?? "");
   const [festive, setFestive] = useState<boolean>(!!settingsState?.festive_enabled);
@@ -62,6 +73,10 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
     setTagline(settingsState?.tagline ?? "");
+    setHeroTitle(settingsState?.hero_title ?? "");
+    setHeroSubtitle(settingsState?.hero_subtitle ?? "");
+    setPrimaryColor(settingsState?.primary_color ?? "");
+    setSecondaryColor(settingsState?.secondary_color ?? "");
     setPhone(settingsState?.phone ?? "");
     setWhatsapp(settingsState?.whatsapp_number ?? "");
     setFestive(!!settingsState?.festive_enabled);
