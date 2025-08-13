@@ -100,6 +100,8 @@ export default function ProductsManager() {
             <Input placeholder="Name" value={newProd.name} onChange={(e)=>setNewProd({...newProd, name:e.target.value})} className="md:col-span-2" />
             <Input placeholder="Image URL" value={newProd.image_url} onChange={(e)=>setNewProd({...newProd, image_url:e.target.value})} className="md:col-span-2" />
             <Input type="number" placeholder="MRP" value={newProd.price_mrp} onChange={(e)=>setNewProd({...newProd, price_mrp:Number(e.target.value)})} />
+            <Input type="number" placeholder="With exchange" value={newProd.price_exchange_mrp} onChange={(e)=>setNewProd({...newProd, price_exchange_mrp:Number(e.target.value)})} />
+            <Input type="number" placeholder="Without exchange" value={newProd.price_without_exchange} onChange={(e)=>setNewProd({...newProd, price_without_exchange:Number(e.target.value)})} />
             <Input type="number" placeholder="Discount %" value={newProd.discount_percent} onChange={(e)=>setNewProd({...newProd, discount_percent:Number(e.target.value)})} />
             <Textarea placeholder="Description (optional)" value={newProd.description} onChange={(e)=>setNewProd({...newProd, description:e.target.value})} className="md:col-span-6" rows={3} />
             <div className="flex items-center justify-between md:col-span-6">
@@ -137,6 +139,8 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
   const [name, setName] = useState(product.name);
   const [image, setImage] = useState(product.image_url || "");
   const [mrp, setMrp] = useState<number>(product.price_mrp || 0);
+  const [priceExchange, setPriceExchange] = useState<number>(product.price_exchange_mrp || 0);
+  const [priceWithoutExchange, setPriceWithoutExchange] = useState<number>(product.price_without_exchange || 0);
   const [disc, setDisc] = useState<number>(product.discount_percent || 0);
   const [sort, setSort] = useState<number>(product.sort_order || 0);
   const [visible, setVisible] = useState<boolean>(!!product.visible);
@@ -149,6 +153,8 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
         <Input placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)} className="md:col-span-2" />
         <Input placeholder="Image URL" value={image} onChange={(e)=>setImage(e.target.value)} className="md:col-span-2" />
         <Input type="number" placeholder="MRP" value={mrp} onChange={(e)=>setMrp(Number(e.target.value))} />
+        <Input type="number" placeholder="With exchange" value={priceExchange} onChange={(e)=>setPriceExchange(Number(e.target.value))} />
+        <Input type="number" placeholder="Without exchange" value={priceWithoutExchange} onChange={(e)=>setPriceWithoutExchange(Number(e.target.value))} />
         <Input type="number" placeholder="Discount %" value={disc} onChange={(e)=>setDisc(Number(e.target.value))} />
         <Textarea placeholder="Description (optional)" value={desc} onChange={(e)=>setDesc(e.target.value)} className="md:col-span-6" rows={3} />
         <div className="flex items-center justify-between md:col-span-6">
@@ -161,7 +167,7 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, description: desc, price_mrp: mrp, discount_percent: disc, sort_order: sort, visible })}>Save</Button>
+            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, description: desc, price_mrp: mrp, price_exchange_mrp: priceExchange, price_without_exchange: priceWithoutExchange, discount_percent: disc, sort_order: sort, visible })}>Save</Button>
             <Button size="sm" onClick={()=>setShowSpecs((v)=>!v)} variant="secondary">{showSpecs? 'Hide Specs':'Specs'}</Button>
             <Button size="sm" variant="destructive" onClick={onDelete}>Delete</Button>
           </div>

@@ -91,6 +91,10 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       whatsapp_number: whatsapp,
       festive_enabled: festive,
       festive_image_url: festiveImage,
+      hero_title: heroTitle || null,
+      hero_subtitle: heroSubtitle || null,
+      primary_color: primaryColor || null,
+      secondary_color: secondaryColor || null,
     });
     if (err) alert(`Error: ${err.message}`);
     else alert("Settings saved");
@@ -108,6 +112,14 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
           <Label htmlFor="tagline">Tagline</Label>
           <Input id="tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} />
         </div>
+        <div className="grid gap-2">
+          <Label htmlFor="heroTitle">Hero title</Label>
+          <Input id="heroTitle" value={heroTitle} onChange={(e)=>setHeroTitle(e.target.value)} placeholder="Power You Can Trust" />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="heroSubtitle">Hero subtitle</Label>
+          <Input id="heroSubtitle" value={heroSubtitle} onChange={(e)=>setHeroSubtitle(e.target.value)} placeholder="Exide home/inverter batteries, car & bike batteries, and Microtek inverters..." />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="grid gap-2">
             <Label htmlFor="phone">Phone</Label>
@@ -116,6 +128,17 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
           <div className="grid gap-2">
             <Label htmlFor="whatsapp">WhatsApp Number</Label>
             <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="primaryColor">Primary color (HSL)</Label>
+            <Input id="primaryColor" value={primaryColor ?? ""} onChange={(e)=>setPrimaryColor(e.target.value)} placeholder="e.g. 222 47% 11%" />
+            <p className="text-xs text-muted-foreground">Use HSL values only (no hsl()). Example: 222 47% 11%</p>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="secondaryColor">Secondary color (HSL)</Label>
+            <Input id="secondaryColor" value={secondaryColor ?? ""} onChange={(e)=>setSecondaryColor(e.target.value)} placeholder="e.g. 210 40% 96.1%" />
           </div>
         </div>
         <div className="flex items-center justify-between border-t pt-4">
