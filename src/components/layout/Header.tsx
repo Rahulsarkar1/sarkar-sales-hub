@@ -2,6 +2,7 @@ import { sections, site as defaultSite } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Phone, Search, MessageCircle } from "lucide-react";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { type Product, formatCurrency } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
@@ -71,7 +72,11 @@ export default function Header({ onSearch }: HeaderProps) {
           <a className="story-link" href={`#${sections.contact}`}>Contact</a>
         </nav>
 
-        <div className="hidden md:flex items-center gap-2 min-w-[380px]">
+        <div className="flex items-center gap-4">
+          <div className="md:hidden">
+            <DarkModeToggle />
+          </div>
+          <div className="hidden md:flex items-center gap-2 min-w-[380px]">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -137,6 +142,7 @@ export default function Header({ onSearch }: HeaderProps) {
               <MessageCircle className="mr-1" /> WhatsApp
             </a>
           </Button>
+          </div>
         </div>
       </div>
 

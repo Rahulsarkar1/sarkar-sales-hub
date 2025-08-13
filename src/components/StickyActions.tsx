@@ -20,13 +20,6 @@ export default function StickyActions() {
       >
         <Phone className="h-6 w-6" />
       </a>
-      <a
-        href="/admin"
-        aria-label="Open admin settings"
-        className="h-10 w-10 rounded-full bg-secondary border flex items-center justify-center hover-scale text-base"
-      >
-        ⚙️
-      </a>
     </div>
   );
 }

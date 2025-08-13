@@ -7,8 +7,8 @@ export default function Footer() {
   const { settings: localUi } = useLocalUi();
   const siteName = (localUi.siteName ?? settings?.site_name ?? defaultSite.name).toUpperCase();
   const whatsapp = localUi.social?.whatsapp ?? settings?.whatsapp_number ?? defaultSite.whatsappNumber;
-  const facebook = localUi.social?.facebook ?? "#";
-  const instagram = localUi.social?.instagram ?? "#";
+  const facebook = localUi.social?.facebook ?? settings?.facebook_url ?? "#";
+  const instagram = localUi.social?.instagram ?? settings?.instagram_url ?? "#";
   return (
     <footer className="border-t mt-12" role="contentinfo">
       <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 gap-8">
@@ -25,6 +25,9 @@ export default function Footer() {
             </li>
             <li>
               <a className="hover:underline" href="/terms">Terms & Conditions</a>
+            </li>
+            <li>
+              <a className="hover:underline" href="/about">About Us</a>
             </li>
           </ul>
         </nav>
@@ -49,7 +52,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-6 space-y-2">
           <p className="text-center text-sm text-muted-foreground">© 2025 SARKAR SALES. All rights reserved.</p>
           <p className="text-center text-sm">
-            <a href="/admin" className="hover:underline">Admin Portal</a>
+            <a href="/admin" className="hover:underline">⚙️</a>
           </p>
         </div>
       </div>

@@ -10,6 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import SegmentsManager from "@/components/admin/SegmentsManager";
 import ProductsManager from "@/components/admin/ProductsManager";
+import ReviewsManager from "@/components/admin/ReviewsManager";
+import PasswordChange from "@/components/admin/PasswordChange";
+import ColorPalette from "@/components/admin/ColorPalette";
 
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
@@ -47,9 +50,11 @@ export default function Admin() {
             <Link to="/">↩️ Return</Link>
           </Button>
         </div>
-        <div className="grid gap-6 max-w-5xl">
+        <div className="space-y-8">
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <UiScaleCard />
+          <PasswordChange />
+          <ReviewsManager />
           <SegmentsManager />
           <ProductsManager />
         </div>

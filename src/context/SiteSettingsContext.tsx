@@ -21,6 +21,11 @@ export type SiteSettings = {
   festive_image_url: string | null;
   hero_title: string | null;
   hero_subtitle: string | null;
+  contact_info: string | null;
+  about_us: string | null;
+  facebook_url: string | null;
+  instagram_url: string | null;
+  hero_background_image: string | null;
 };
 
 interface SiteSettingsContextValue {

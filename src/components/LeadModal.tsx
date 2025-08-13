@@ -72,7 +72,7 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
         </div>
         <DialogFooter className="sm:justify-between">
           <Button variant="secondary" asChild>
-            <a href={`tel:${phone || site.phone}`} aria-label="One tap call">
+            <a href={`tel:${site.phone}`} aria-label="Call now">
               Call Now
             </a>
           </Button>
@@ -81,7 +81,7 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
             disabled={!canSubmit}
             onClick={() => window.location.assign(makeWhatsAppUrl())}
           >
-            Submit
+            WhatsApp Now
           </Button>
         </DialogFooter>
       </DialogContent>

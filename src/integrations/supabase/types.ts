@@ -105,6 +105,39 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          rating: number
+          sort_order: number
+          text: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          rating?: number
+          sort_order?: number
+          text: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          rating?: number
+          sort_order?: number
+          text?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       segments: {
         Row: {
           created_at: string
@@ -137,15 +170,20 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          about_us: string | null
           address: string | null
           base_font_size: number | null
           canonical_url: string | null
           city: string | null
+          contact_info: string | null
           email: string | null
+          facebook_url: string | null
           festive_enabled: boolean | null
           festive_image_url: string | null
+          hero_background_image: string | null
           hero_subtitle: string | null
           hero_title: string | null
+          instagram_url: string | null
           key: string
           logo_url: string | null
           map_embed_src: string | null
@@ -158,15 +196,20 @@ export type Database = {
           whatsapp_number: string | null
         }
         Insert: {
+          about_us?: string | null
           address?: string | null
           base_font_size?: number | null
           canonical_url?: string | null
           city?: string | null
+          contact_info?: string | null
           email?: string | null
+          facebook_url?: string | null
           festive_enabled?: boolean | null
           festive_image_url?: string | null
+          hero_background_image?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
+          instagram_url?: string | null
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null
@@ -179,15 +222,20 @@ export type Database = {
           whatsapp_number?: string | null
         }
         Update: {
+          about_us?: string | null
           address?: string | null
           base_font_size?: number | null
           canonical_url?: string | null
           city?: string | null
+          contact_info?: string | null
           email?: string | null
+          facebook_url?: string | null
           festive_enabled?: boolean | null
           festive_image_url?: string | null
+          hero_background_image?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
+          instagram_url?: string | null
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null
