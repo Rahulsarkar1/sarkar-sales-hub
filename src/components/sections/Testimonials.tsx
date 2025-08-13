@@ -11,20 +11,27 @@ const fallbackReviews: Review[] = [
 ];
 
 export default function Testimonials() {
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews = [], isError } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("visible", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return data as Review[];
+      try {
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*")
+          .eq("visible", true)
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return data as Review[];
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        return [];
+      }
     },
+    retry: false, // Don't retry on error
   });
 
-  const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
+  // Use fallback reviews if database fetch failed or returned empty
+  const displayReviews = (reviews && reviews.length > 0) ? reviews : fallbackReviews;
 
   return (
     <section id="reviews" className="py-12">
