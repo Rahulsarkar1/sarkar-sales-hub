@@ -23,7 +23,7 @@ export default function Header({ onSearch }: HeaderProps) {
   const phone = settings?.phone || defaultSite.phone;
   const whatsapp = settings?.whatsapp_number || localUi.social?.whatsapp || defaultSite.whatsappNumber;
 
-  const logo = localUi.logoDataUrl ?? null;
+  const logo = settings?.logo_url || localUi.logoDataUrl || null;
 
   const { productsByCategory } = useCatalog();
 
