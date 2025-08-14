@@ -20,8 +20,8 @@ export default function Header({ onSearch }: HeaderProps) {
   const { settings: localUi } = useLocalUi();
   const siteName = localUi.siteName ?? settings?.site_name ?? defaultSite.name;
   const siteTagline = localUi.tagline ?? settings?.tagline ?? defaultSite.tagline;
-  const phone = settings?.phone ?? defaultSite.phone;
-  const whatsapp = localUi.social?.whatsapp ?? settings?.whatsapp_number ?? defaultSite.whatsappNumber;
+  const phone = settings?.phone || defaultSite.phone;
+  const whatsapp = settings?.whatsapp_number || localUi.social?.whatsapp || defaultSite.whatsappNumber;
 
   const logo = localUi.logoDataUrl ?? null;
 
@@ -73,9 +73,7 @@ export default function Header({ onSearch }: HeaderProps) {
         </nav>
 
         <div className="flex items-center gap-4">
-          <div className="md:hidden">
-            <DarkModeToggle />
-          </div>
+          <DarkModeToggle />
           <div className="hidden md:flex items-center gap-2 min-w-[380px]">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

@@ -52,6 +52,7 @@ export default function Admin() {
         </div>
         <div className="space-y-8">
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
+          <ColorPalette onColorSelect={(primary, secondary) => updateSettings({ primary_color: primary, secondary_color: secondary })} />
           <UiScaleCard />
           <PasswordChange />
           <ReviewsManager />
@@ -74,6 +75,15 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   const [whatsapp, setWhatsapp] = useState(settingsState?.whatsapp_number ?? "");
   const [festive, setFestive] = useState<boolean>(!!settingsState?.festive_enabled);
   const [festiveImage, setFestiveImage] = useState(settingsState?.festive_image_url ?? "");
+  const [email, setEmail] = useState(settingsState?.email ?? "");
+  const [address, setAddress] = useState(settingsState?.address ?? "");
+  const [city, setCity] = useState(settingsState?.city ?? "");
+  const [mapEmbedSrc, setMapEmbedSrc] = useState(settingsState?.map_embed_src ?? "");
+  const [aboutUs, setAboutUs] = useState(settingsState?.about_us ?? "");
+  const [facebookUrl, setFacebookUrl] = useState(settingsState?.facebook_url ?? "");
+  const [instagramUrl, setInstagramUrl] = useState(settingsState?.instagram_url ?? "");
+  const [logoUrl, setLogoUrl] = useState(settingsState?.logo_url ?? "");
+  const [contactInfo, setContactInfo] = useState(settingsState?.contact_info ?? "");
 
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
@@ -86,6 +96,15 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
     setWhatsapp(settingsState?.whatsapp_number ?? "");
     setFestive(!!settingsState?.festive_enabled);
     setFestiveImage(settingsState?.festive_image_url ?? "");
+    setEmail(settingsState?.email ?? "");
+    setAddress(settingsState?.address ?? "");
+    setCity(settingsState?.city ?? "");
+    setMapEmbedSrc(settingsState?.map_embed_src ?? "");
+    setAboutUs(settingsState?.about_us ?? "");
+    setFacebookUrl(settingsState?.facebook_url ?? "");
+    setInstagramUrl(settingsState?.instagram_url ?? "");
+    setLogoUrl(settingsState?.logo_url ?? "");
+    setContactInfo(settingsState?.contact_info ?? "");
   }, [settingsState]);
 
   const handleSave = async () => {
@@ -94,6 +113,15 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       tagline,
       phone,
       whatsapp_number: whatsapp,
+      email,
+      address,
+      city,
+      map_embed_src: mapEmbedSrc,
+      about_us: aboutUs,
+      facebook_url: facebookUrl,
+      instagram_url: instagramUrl,
+      logo_url: logoUrl,
+      contact_info: contactInfo,
       festive_enabled: festive,
       festive_image_url: festiveImage,
       hero_title: heroTitle || null,
@@ -115,7 +143,7 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
         </div>
         <div className="grid gap-2">
           <Label htmlFor="tagline">Tagline</Label>
-          <Input id="tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} />
+          <Input id="tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Your trusted partner for all battery solutions" />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="heroTitle">Hero title</Label>
@@ -133,6 +161,48 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
           <div className="grid gap-2">
             <Label htmlFor="whatsapp">WhatsApp Number</Label>
             <Input id="whatsapp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="city">City</Label>
+            <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+          </div>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="address">Address</Label>
+          <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="mapEmbedSrc">Map Embed URL</Label>
+          <Input id="mapEmbedSrc" value={mapEmbedSrc} onChange={(e) => setMapEmbedSrc(e.target.value)} placeholder="Google Maps embed URL" />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="logoUrl">Logo URL</Label>
+          <Input id="logoUrl" value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://..." />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="aboutUs">About Us Content</Label>
+          <textarea 
+            id="aboutUs" 
+            value={aboutUs} 
+            onChange={(e) => setAboutUs(e.target.value)} 
+            className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder="Tell your customers about your business..."
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="facebookUrl">Facebook URL</Label>
+            <Input id="facebookUrl" value={facebookUrl} onChange={(e) => setFacebookUrl(e.target.value)} placeholder="https://facebook.com/..." />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="instagramUrl">Instagram URL</Label>
+            <Input id="instagramUrl" value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} placeholder="https://instagram.com/..." />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

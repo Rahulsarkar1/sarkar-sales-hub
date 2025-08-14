@@ -79,7 +79,11 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
   const updateSettings = async (patch: Partial<SiteSettings>) => {
     const next = { ...(settings ?? { key: "default" }), ...patch } as SiteSettings;
     const { error } = await supabase.from("site_settings").upsert(next);
-    if (!error) setSettings(next);
+    if (!error) {
+      setSettings(next);
+      // Trigger a refresh to ensure all components get updated data
+      setTimeout(() => load(), 100);
+    }
     return error ?? null;
   };
 
