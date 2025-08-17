@@ -80,12 +80,12 @@ export default function CategorySection({
                 <DrawerTrigger asChild>
                   <Button variant="ghost" size="sm">View all</Button>
                 </DrawerTrigger>
-                <DrawerContent className="max-h-[80vh] flex flex-col">
-                  <DrawerHeader className="flex-shrink-0">
+                <DrawerContent className="max-h-[85vh]">
+                  <div className="overflow-y-auto flex-1">
+                  <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                   </DrawerHeader>
-                  <div className="flex-1 overflow-y-auto px-4 pb-6">
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="px-4 pb-6 grid grid-cols-1 gap-4">
                       {(fullProducts ?? products).map((p) => (
                         <ProductCard key={p.id} product={p} />
                       ))}
