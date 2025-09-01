@@ -22,7 +22,9 @@ type LeadModalProps = {
 
 export default function LeadModal({ productName, children }: LeadModalProps) {
   const { settings } = useSiteSettings();
-  const phone = settings?.phone || site.phone;
+  // Extract first phone number only
+  const phoneRaw = settings?.phone || site.phone;
+  const phone = phoneRaw?.split(' / ')[0] || phoneRaw;
   const whatsapp = settings?.whatsapp_number || site.whatsappNumber;
 
   const makeWhatsAppUrl = () => {

@@ -34,7 +34,7 @@ export default function ProductsManager() {
       if (!selected) return [];
       const { data, error } = await (supabase as any)
         .from("products")
-        .select("id,name,image_url,price_mrp,price_exchange_mrp,price_without_exchange,discount_percent,sort_order,visible,description")
+        .select("id,name,image_url,price_mrp,price_exchange_mrp,price_without_exchange,discount_percent,sort_order,visible,description,show_exchange_price,show_without_exchange_price,special_price,show_special_price")
         .eq("segment_id", selected)
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -76,7 +76,7 @@ export default function ProductsManager() {
     },
   });
 
-  const [newProd, setNewProd] = useState({ name: "", image_url: "", description: "", price_mrp: 0, price_exchange_mrp: 0, price_without_exchange: 0, discount_percent: 0, sort_order: 0, visible: true });
+  const [newProd, setNewProd] = useState({ name: "", image_url: "", description: "", price_mrp: 0, price_exchange_mrp: 0, price_without_exchange: 0, discount_percent: 0, sort_order: 0, visible: true, show_exchange_price: false, show_without_exchange_price: false, special_price: 0, show_special_price: false });
 
   const segmentOptions = useMemo(() => segments.map((s:any) => ({ id: s.id, name: s.name })), [segments]);
 
@@ -104,6 +104,21 @@ export default function ProductsManager() {
             <Input type="number" placeholder="Without exchange" value={newProd.price_without_exchange} onChange={(e)=>setNewProd({...newProd, price_without_exchange:Number(e.target.value)})} />
             <Input type="number" placeholder="Discount %" value={newProd.discount_percent} onChange={(e)=>setNewProd({...newProd, discount_percent:Number(e.target.value)})} />
             <Textarea placeholder="Description (optional)" value={newProd.description} onChange={(e)=>setNewProd({...newProd, description:e.target.value})} className="md:col-span-6" rows={3} />
+            <div className="md:col-span-6 grid grid-cols-2 md:grid-cols-4 gap-4 p-3 border rounded bg-muted/50">
+              <div className="flex items-center space-x-2">
+                <Switch checked={newProd.show_exchange_price} onCheckedChange={(v)=>setNewProd({...newProd, show_exchange_price:v})} />
+                <Label className="text-sm">Show Exchange Price</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch checked={newProd.show_without_exchange_price} onCheckedChange={(v)=>setNewProd({...newProd, show_without_exchange_price:v})} />
+                <Label className="text-sm">Show Without Exchange</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch checked={newProd.show_special_price} onCheckedChange={(v)=>setNewProd({...newProd, show_special_price:v})} />
+                <Label className="text-sm">Show Special Price</Label>
+              </div>
+              <Input type="number" placeholder="Special Price" value={newProd.special_price} onChange={(e)=>setNewProd({...newProd, special_price:Number(e.target.value)})} disabled={!newProd.show_special_price} />
+            </div>
             <div className="flex items-center justify-between md:col-span-6">
               <div className="flex items-center gap-2">
                 <Label>Sort</Label>
@@ -146,6 +161,12 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
   const [visible, setVisible] = useState<boolean>(!!product.visible);
   const [desc, setDesc] = useState<string>(product.description || "");
   const [showSpecs, setShowSpecs] = useState(false);
+  
+  // New pricing display options
+  const [showExchangePrice, setShowExchangePrice] = useState<boolean>(!!product.show_exchange_price);
+  const [showWithoutExchangePrice, setShowWithoutExchangePrice] = useState<boolean>(!!product.show_without_exchange_price);
+  const [showSpecialPrice, setShowSpecialPrice] = useState<boolean>(!!product.show_special_price);
+  const [specialPrice, setSpecialPrice] = useState<number>(product.special_price || 0);
 
   return (
     <div className="border rounded p-2 space-y-2">
@@ -157,6 +178,21 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
         <Input type="number" placeholder="Without exchange" value={priceWithoutExchange} onChange={(e)=>setPriceWithoutExchange(Number(e.target.value))} />
         <Input type="number" placeholder="Discount %" value={disc} onChange={(e)=>setDisc(Number(e.target.value))} />
         <Textarea placeholder="Description (optional)" value={desc} onChange={(e)=>setDesc(e.target.value)} className="md:col-span-6" rows={3} />
+        <div className="md:col-span-6 grid grid-cols-2 md:grid-cols-4 gap-4 p-3 border rounded bg-muted/50">
+          <div className="flex items-center space-x-2">
+            <Switch checked={showExchangePrice} onCheckedChange={setShowExchangePrice} />
+            <Label className="text-sm">Show Exchange Price</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch checked={showWithoutExchangePrice} onCheckedChange={setShowWithoutExchangePrice} />
+            <Label className="text-sm">Show Without Exchange</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch checked={showSpecialPrice} onCheckedChange={setShowSpecialPrice} />
+            <Label className="text-sm">Show Special Price</Label>
+          </div>
+          <Input type="number" placeholder="Special Price" value={specialPrice} onChange={(e)=>setSpecialPrice(Number(e.target.value))} disabled={!showSpecialPrice} />
+        </div>
         <div className="flex items-center justify-between md:col-span-6">
           <div className="flex items-center gap-2">
             <Label>Sort</Label>
@@ -167,7 +203,7 @@ function ProductRow({ product, onSave, onDelete }:{ product:any; onSave:(patch:a
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, description: desc, price_mrp: mrp, price_exchange_mrp: priceExchange, price_without_exchange: priceWithoutExchange, discount_percent: disc, sort_order: sort, visible })}>Save</Button>
+            <Button size="sm" variant="outline" onClick={()=>onSave({ name, image_url: image, description: desc, price_mrp: mrp, price_exchange_mrp: priceExchange, price_without_exchange: priceWithoutExchange, discount_percent: disc, sort_order: sort, visible, show_exchange_price: showExchangePrice, show_without_exchange_price: showWithoutExchangePrice, show_special_price: showSpecialPrice, special_price: specialPrice })}>Save</Button>
             <Button size="sm" onClick={()=>setShowSpecs((v)=>!v)} variant="secondary">{showSpecs? 'Hide Specs':'Specs'}</Button>
             <Button size="sm" variant="destructive" onClick={onDelete}>Delete</Button>
           </div>

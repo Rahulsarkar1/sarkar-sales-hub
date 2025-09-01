@@ -28,11 +28,11 @@ export default function ProductDetailsDialog({ product, children }: { product: P
     queryFn: async () => {
       const { data, error } = await (supabase as any)
         .from("products")
-        .select("description,price_mrp,price_exchange_mrp,price_without_exchange")
+        .select("description,price_mrp,price_exchange_mrp,price_without_exchange,show_exchange_price,show_without_exchange_price,show_special_price,special_price")
         .eq("id", product.id)
         .single();
       if (error) throw error;
-      return data as { description: string | null; price_mrp: number | null; price_exchange_mrp: number | null; price_without_exchange: number | null };
+      return data as { description: string | null; price_mrp: number | null; price_exchange_mrp: number | null; price_without_exchange: number | null; show_exchange_price: boolean | null; show_without_exchange_price: boolean | null; show_special_price: boolean | null; special_price: number | null };
     },
   });
 
@@ -59,14 +59,24 @@ export default function ProductDetailsDialog({ product, children }: { product: P
               <span>MRP</span>
               <span className="font-medium">{formatCurrency(details?.price_mrp ?? product.price)}</span>
             </div>
-            <div className="flex items-center justify-between text-sm">
-              <span>With battery exchange</span>
-              <span className="font-medium">{details?.price_exchange_mrp != null ? formatCurrency(details.price_exchange_mrp) : '—'}</span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span>Without battery exchange</span>
-              <span className="font-medium">{details?.price_without_exchange != null ? formatCurrency(details.price_without_exchange) : formatCurrency(details?.price_mrp ?? product.price)}</span>
-            </div>
+            {details?.show_exchange_price && details?.price_exchange_mrp != null && (
+              <div className="flex items-center justify-between text-sm">
+                <span>With battery exchange</span>
+                <span className="font-medium">{formatCurrency(details.price_exchange_mrp)}</span>
+              </div>
+            )}
+            {details?.show_without_exchange_price && (
+              <div className="flex items-center justify-between text-sm">
+                <span>Without battery exchange</span>
+                <span className="font-medium">{details?.price_without_exchange != null ? formatCurrency(details.price_without_exchange) : formatCurrency(details?.price_mrp ?? product.price)}</span>
+              </div>
+            )}
+            {details?.show_special_price && details?.special_price != null && (
+              <div className="flex items-center justify-between text-sm">
+                <span>Special price</span>
+                <span className="font-medium text-primary">{formatCurrency(details.special_price)}</span>
+              </div>
+            )}
           </div>
 
           {details?.description && (
