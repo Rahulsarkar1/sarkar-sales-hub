@@ -30,6 +30,17 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
     return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   };
 
+  const handleWhatsAppClick = () => {
+    const url = makeWhatsAppUrl();
+    
+    // Better desktop support
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      window.location.assign(url);
+    } else {
+      window.open(url, '_blank');
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -53,7 +64,7 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
           </Button>
           <Button
             variant="default"
-            onClick={() => window.location.assign(makeWhatsAppUrl())}
+            onClick={handleWhatsAppClick}
           >
             WhatsApp Now
           </Button>

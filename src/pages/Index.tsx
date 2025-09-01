@@ -73,7 +73,21 @@ export default function Index() {
                   <a href={`#${sections.products}`}>Browse Products</a>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent('Hi! I want the best price for an inverter/battery.')}`} target="_blank" rel="noreferrer">Get Best Price</a>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
+                      const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
+                      
+                      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        window.location.href = url;
+                      } else {
+                        window.open(url, '_blank');
+                      }
+                    }}
+                  >
+                    Get Best Price
+                  </button>
                 </Button>
               </div>
             </div>

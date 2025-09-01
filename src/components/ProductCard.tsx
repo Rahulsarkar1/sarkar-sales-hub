@@ -16,13 +16,15 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="flex items-start gap-3">
         <ProductDetailsDialog product={product}>
           <div className="flex items-start gap-3 cursor-pointer">
-            <img
-              src={product.image}
-              alt={`${product.name} product image`}
-              loading="lazy"
-              decoding="async"
-              className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-md border"
-            />
+            <div className="w-24 md:w-28 aspect-square">
+              <img
+                src={product.image}
+                alt={`${product.name} product image`}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-contain rounded-md border"
+              />
+            </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold leading-snug mb-1">{product.name}</h3>
               <div className="flex items-center gap-2 mb-2 flex-wrap">

@@ -23,7 +23,7 @@ export default function Header({ onSearch }: HeaderProps) {
   const phone = settings?.phone || defaultSite.phone;
   const whatsapp = settings?.whatsapp_number || localUi.social?.whatsapp || defaultSite.whatsappNumber;
 
-  const logo = localUi.logoDataUrl ?? null;
+  const logo = settings?.logo_url || localUi.logoDataUrl;
 
   const { productsByCategory } = useCatalog();
 
@@ -131,14 +131,22 @@ export default function Header({ onSearch }: HeaderProps) {
             </a>
           </Button>
           <Button asChild variant="hero">
-            <a
-              href={`https://wa.me/${whatsapp}?text=${encodeURIComponent("Hello Sarkar Sales! I have a quick question.")}`}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const text = encodeURIComponent("Hello Sarkar Sales! I have a quick question.");
+                const url = `https://wa.me/${whatsapp}?text=${text}`;
+                
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                  window.location.href = url;
+                } else {
+                  window.open(url, '_blank');
+                }
+              }}
               aria-label="Chat on WhatsApp"
             >
               <MessageCircle className="mr-1" /> WhatsApp
-            </a>
+            </button>
           </Button>
           </div>
         </div>
