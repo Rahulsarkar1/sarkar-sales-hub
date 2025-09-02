@@ -12,7 +12,7 @@ export default function Contact() {
   const mapEmbedSrc = settings?.map_embed_src || site.mapEmbedSrc;
 
   return (
-    <section id="contact" className="py-12">
+    <section id="contact" className="py-8">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Contact & Map</h2>
         <div className="grid lg:grid-cols-2 gap-6">

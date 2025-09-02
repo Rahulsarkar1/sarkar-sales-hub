@@ -61,7 +61,7 @@ export default function Index() {
         <Header onSearch={setQ} />
         <FestivePopup />
 
-        <main className="pb-28 overflow-visible md:overflow-hidden">
+        <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}
           <section className="relative md:overflow-hidden overflow-visible">
             <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} aria-hidden />

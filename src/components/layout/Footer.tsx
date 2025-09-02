@@ -10,7 +10,7 @@ export default function Footer() {
   const facebook = localUi.social?.facebook ?? settings?.facebook_url ?? "#";
   const instagram = localUi.social?.instagram ?? settings?.instagram_url ?? "#";
   return (
-    <footer className="border-t mt-12" role="contentinfo">
+    <footer className="border-t mt-8" role="contentinfo">
       <div className="container mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-3 gap-8">
         <section aria-labelledby="footer-brand" className="col-span-2 md:col-span-1">
           <h2 id="footer-brand" className="text-xl font-bold">{siteName}</h2>
