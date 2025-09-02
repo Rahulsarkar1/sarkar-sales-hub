@@ -9,18 +9,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/50 disabled:text-primary-foreground/50",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-destructive/50 disabled:text-destructive-foreground/50",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground disabled:border-input/50 disabled:text-foreground/50 dark:border-border dark:hover:bg-secondary",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:bg-secondary/50 disabled:text-secondary-foreground/50",
+        ghost: "hover:bg-accent hover:text-accent-foreground disabled:text-foreground/50 dark:hover:bg-secondary/80",
+        link: "text-primary underline-offset-4 hover:underline disabled:text-primary/50",
+        hero: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm disabled:bg-primary/50 disabled:text-primary-foreground/50",
         glass:
-          "bg-background/40 backdrop-blur border border-border text-foreground hover:bg-background/60",
+          "bg-background/60 backdrop-blur border-2 border-border text-foreground hover:bg-background/80 disabled:bg-background/30 disabled:text-foreground/50 dark:bg-card/80 dark:hover:bg-card/90",
       },
       size: {
         default: "h-10 px-4 py-2",
