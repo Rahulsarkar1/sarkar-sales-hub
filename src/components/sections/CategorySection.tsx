@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-is-mobile";
+import { EnhancedScrollArea } from "@/components/ui/enhanced-scroll-area";
 
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
@@ -81,16 +82,16 @@ export default function CategorySection({
                   <Button variant="ghost" size="sm">View all</Button>
                 </DrawerTrigger>
                 <DrawerContent className="max-h-[85vh]">
-                  <div className="overflow-y-auto flex-1">
                   <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                   </DrawerHeader>
+                  <EnhancedScrollArea className="flex-1 max-h-[calc(85vh-80px)]">
                     <div className="px-4 pb-6 grid grid-cols-1 gap-4">
                       {(fullProducts ?? products).map((p) => (
                         <ProductCard key={p.id} product={p} />
                       ))}
                     </div>
-                  </div>
+                  </EnhancedScrollArea>
                 </DrawerContent>
               </Drawer>
             </div>
@@ -100,15 +101,17 @@ export default function CategorySection({
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm">View all</Button>
                 </DialogTrigger>
-                <DialogContent className="w-[92vw] max-w-3xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="w-[92vw] max-w-3xl max-h-[80vh] overflow-hidden">
                   <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                   </DialogHeader>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(fullProducts ?? products).map((p) => (
-                      <ProductCard key={p.id} product={p} />
-                    ))}
-                  </div>
+                  <EnhancedScrollArea className="max-h-[calc(80vh-80px)]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(fullProducts ?? products).map((p) => (
+                        <ProductCard key={p.id} product={p} />
+                      ))}
+                    </div>
+                  </EnhancedScrollArea>
                 </DialogContent>
               </Dialog>
             </div>

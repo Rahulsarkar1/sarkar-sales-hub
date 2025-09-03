@@ -104,6 +104,23 @@ export default {
 				'slide-out-right': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(100%)' }
+				},
+				// iOS-style bounce effects
+				'bounce-top': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-8px)' }
+				},
+				'bounce-bottom': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(8px)' }
+				},
+				'gradient-fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'gradient-fade-out': {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
 				}
 			},
 			animation: {
@@ -116,7 +133,11 @@ export default {
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
 				enter: 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
-				exit: 'fade-out 0.3s ease-out, scale-out 0.2s ease-out'
+				exit: 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
+				'bounce-top': 'bounce-top 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+				'bounce-bottom': 'bounce-bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+				'gradient-fade-in': 'gradient-fade-in 0.3s ease-out',
+				'gradient-fade-out': 'gradient-fade-out 0.3s ease-out'
 			}
 		}
 	},

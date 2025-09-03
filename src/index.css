@@ -149,4 +149,9 @@ All colors MUST be HSL.
     transform: scaleX(1);
     transform-origin: bottom left;
   }
+
+  .ios-bounce-scroll {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
 }
