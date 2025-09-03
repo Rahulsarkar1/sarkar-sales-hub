@@ -1,33 +1,33 @@
 import * as React from "react"
-import { ScrollArea } from "./scroll-area"
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 import { cn } from "@/lib/utils"
 
-interface EnhancedScrollAreaProps extends React.ComponentProps<typeof ScrollArea> {
+interface EnhancedScrollAreaProps extends React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> {
   children: React.ReactNode
   className?: string
 }
 
 export const EnhancedScrollArea = React.forwardRef<
-  React.ElementRef<typeof ScrollArea>,
+  React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   EnhancedScrollAreaProps
 >(({ className, children, ...props }, ref) => {
   const [scrollPosition, setScrollPosition] = React.useState({ top: 0, bottom: 0 })
-  const [isScrolling, setIsScrolling] = React.useState(false)
   const [bounceDirection, setBounceDirection] = React.useState<'top' | 'bottom' | null>(null)
-  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const viewportRef = React.useRef<HTMLDivElement>(null)
   const timeoutRef = React.useRef<NodeJS.Timeout>()
 
-  const handleScroll = React.useCallback((event: React.UIEvent<HTMLDivElement>) => {
-    const element = event.currentTarget
-    const scrollTop = element.scrollTop
-    const scrollHeight = element.scrollHeight
-    const clientHeight = element.clientHeight
+  const handleScroll = React.useCallback(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    const scrollTop = viewport.scrollTop
+    const scrollHeight = viewport.scrollHeight
+    const clientHeight = viewport.clientHeight
     
     const maxScroll = scrollHeight - clientHeight
     const scrollBottom = maxScroll - scrollTop
 
     setScrollPosition({ top: scrollTop, bottom: scrollBottom })
-    setIsScrolling(true)
 
     // Detect bounce at boundaries
     if (scrollTop <= 0 && bounceDirection !== 'top') {
@@ -43,79 +43,81 @@ export const EnhancedScrollArea = React.forwardRef<
       clearTimeout(timeoutRef.current)
     }
 
-    // Set scrolling to false after scroll ends
+    // Reset bounce after animation
     timeoutRef.current = setTimeout(() => {
-      setIsScrolling(false)
       setBounceDirection(null)
-    }, 150)
+    }, 300)
   }, [bounceDirection])
 
   React.useEffect(() => {
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    viewport.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
+      viewport.removeEventListener('scroll', handleScroll)
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [])
+  }, [handleScroll])
 
   const showTopGradient = scrollPosition.top > 20
   const showBottomGradient = scrollPosition.bottom > 20
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative">
       {/* Top gradient fade */}
       <div
         className={cn(
-          "absolute top-0 left-0 right-0 h-8 z-10 pointer-events-none transition-opacity duration-300",
-          "bg-gradient-to-b from-blue-500/10 via-blue-400/5 to-transparent",
+          "absolute top-0 left-0 right-0 h-6 z-10 pointer-events-none transition-opacity duration-300",
           showTopGradient ? "opacity-100" : "opacity-0"
         )}
         style={{
-          background: showTopGradient 
-            ? "linear-gradient(to bottom, hsl(217 91% 60% / 0.1), hsl(217 91% 60% / 0.05), transparent)"
-            : "transparent"
+          background: "linear-gradient(to bottom, hsl(var(--primary) / 0.08), transparent)"
         }}
       />
 
       {/* Bottom gradient fade */}
       <div
         className={cn(
-          "absolute bottom-0 left-0 right-0 h-8 z-10 pointer-events-none transition-opacity duration-300",
-          "bg-gradient-to-t from-blue-500/10 via-blue-400/5 to-transparent",
+          "absolute bottom-0 left-0 right-0 h-6 z-10 pointer-events-none transition-opacity duration-300",
           showBottomGradient ? "opacity-100" : "opacity-0"
         )}
         style={{
-          background: showBottomGradient 
-            ? "linear-gradient(to top, hsl(217 91% 60% / 0.1), hsl(217 91% 60% / 0.05), transparent)"
-            : "transparent"
+          background: "linear-gradient(to top, hsl(var(--primary) / 0.08), transparent)"
         }}
       />
 
       {/* Enhanced scroll area with bounce effect */}
-      <ScrollArea
+      <ScrollAreaPrimitive.Root
         ref={ref}
         className={cn(
-          "w-full transition-transform duration-150 ease-out",
+          "relative overflow-hidden transition-transform duration-200 ease-out",
           bounceDirection === 'top' && "animate-bounce-top",
           bounceDirection === 'bottom' && "animate-bounce-bottom",
           className
         )}
         {...props}
       >
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="w-full h-full overflow-y-auto overscroll-y-contain"
+        <ScrollAreaPrimitive.Viewport 
+          ref={viewportRef}
+          className="h-full w-full rounded-[inherit]"
           style={{
-            scrollBehavior: 'smooth',
+            overscrollBehavior: 'contain',
             WebkitOverflowScrolling: 'touch',
           }}
         >
-          <div className="px-1">
-            {children}
-          </div>
-        </div>
-      </ScrollArea>
+          {children}
+        </ScrollAreaPrimitive.Viewport>
+        <ScrollAreaPrimitive.ScrollAreaScrollbar
+          className="flex touch-none select-none transition-colors h-full w-2.5 border-l border-l-transparent p-[1px]"
+          orientation="vertical"
+        >
+          <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
+        </ScrollAreaPrimitive.ScrollAreaScrollbar>
+        <ScrollAreaPrimitive.Corner />
+      </ScrollAreaPrimitive.Root>
     </div>
   )
 })
