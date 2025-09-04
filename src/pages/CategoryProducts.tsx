@@ -14,8 +14,8 @@ export default function CategoryProducts() {
   const { categoriesList, productsByCategory } = useCatalog();
   const { settings } = useSiteSettings();
   
-  // Convert URL-safe category name back to display name
-  const displayCategoryName = categoryName?.replace(/-/g, ' ');
+  // Convert URL-safe category name back to display name (handle special characters)
+  const displayCategoryName = categoryName?.replace(/-/g, ' ').replace(/%2F/g, '/').replace(/%26/g, '&');
   
   // Find the exact category match (case-insensitive)
   const matchedCategory = categoriesList.find(

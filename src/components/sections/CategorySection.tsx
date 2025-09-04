@@ -25,8 +25,8 @@ export default function CategorySection({
   const isMobile = useIsMobile();
   const slides = chunk(products, 3);
   
-  // Convert category title to URL-safe format
-  const categoryPath = title.replace(/\s+/g, '-').toLowerCase();
+  // Convert category title to URL-safe format (handle special characters)
+  const categoryPath = title.replace(/\s+/g, '-').replace(/\//g, '%2F').replace(/&/g, '%26').toLowerCase();
 
   const accentHue =
     accent === "exide"

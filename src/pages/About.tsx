@@ -1,11 +1,19 @@
+import { useState } from "react";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
+import Header from "@/components/layout/Header";
 
 export default function About() {
   const { settings } = useSiteSettings();
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
   
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Header onSearch={handleSearch} />
+      <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-8">About Us</h1>
         
         <div className="prose prose-lg max-w-4xl">
@@ -26,7 +34,7 @@ export default function About() {
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

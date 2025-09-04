@@ -96,7 +96,7 @@ export default function Header({ onSearch }: HeaderProps) {
                           alt={`${p.name} thumbnail`}
                           loading="lazy"
                           decoding="async"
-                          className="h-12 w-12 rounded border object-cover"
+                          className="h-16 w-16 rounded border object-contain bg-background/50"
                         />
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-medium truncate">{p.name}</div>
@@ -175,7 +175,7 @@ export default function Header({ onSearch }: HeaderProps) {
                           alt={`${p.name} thumbnail`}
                           loading="lazy"
                           decoding="async"
-                          className="h-12 w-12 rounded border object-cover"
+                          className="h-16 w-16 rounded border object-contain bg-background/50"
                         />
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-medium truncate">{p.name}</div>
