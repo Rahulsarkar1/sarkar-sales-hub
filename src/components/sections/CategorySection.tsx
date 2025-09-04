@@ -1,11 +1,9 @@
+import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import { EnhancedScrollArea } from "@/components/ui/enhanced-scroll-area";
 
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
@@ -26,6 +24,9 @@ export default function CategorySection({
 }) {
   const isMobile = useIsMobile();
   const slides = chunk(products, 3);
+  
+  // Convert category title to URL-safe format
+  const categoryPath = title.replace(/\s+/g, '-').toLowerCase();
 
   const accentHue =
     accent === "exide"
@@ -75,46 +76,11 @@ export default function CategorySection({
             </div>
           )}
           <div className="mt-4 text-right">
-            {/* Mobile: Drawer to avoid fullscreen dialog scroll lock */}
-            <div className="inline-block md:hidden">
-              <Drawer>
-                <DrawerTrigger asChild>
-                  <Button variant="ghost" size="sm">View all</Button>
-                </DrawerTrigger>
-                <DrawerContent className="max-h-[85vh]">
-                  <DrawerHeader className="text-left">
-                    <DrawerTitle>{title}</DrawerTitle>
-                  </DrawerHeader>
-                  <EnhancedScrollArea className="flex-1 max-h-[calc(85vh-80px)]">
-                    <div className="px-4 pb-6 grid grid-cols-1 gap-4">
-                      {(fullProducts ?? products).map((p) => (
-                        <ProductCard key={p.id} product={p} />
-                      ))}
-                    </div>
-                  </EnhancedScrollArea>
-                </DrawerContent>
-              </Drawer>
-            </div>
-            {/* Desktop: keep dialog with capped size and internal scroll */}
-            <div className="hidden md:inline-block">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm">View all</Button>
-                </DialogTrigger>
-                <DialogContent className="w-[92vw] max-w-3xl max-h-[80vh] overflow-hidden">
-                  <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                  </DialogHeader>
-                  <EnhancedScrollArea className="max-h-[calc(80vh-80px)]">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {(fullProducts ?? products).map((p) => (
-                        <ProductCard key={p.id} product={p} />
-                      ))}
-                    </div>
-                  </EnhancedScrollArea>
-                </DialogContent>
-              </Dialog>
-            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <Link to={`/category/${categoryPath}`}>
+                View all
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
