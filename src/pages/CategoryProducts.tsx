@@ -41,10 +41,10 @@ export default function CategoryProducts() {
     setSearchQuery(query);
   };
 
-  // Scroll to top when component mounts
+  // Scroll to top when component mounts or category changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [categoryName]);
   
   return (
     <HelmetProvider>

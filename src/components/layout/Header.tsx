@@ -21,7 +21,7 @@ export default function Header({ onSearch }: HeaderProps) {
   const { settings: localUi } = useLocalUi();
   const siteName = localUi.siteName ?? settings?.site_name ?? defaultSite.name;
   const siteTagline = localUi.tagline ?? settings?.tagline ?? defaultSite.tagline;
-  const phone = settings?.phone || defaultSite.phone;
+  const phone = (settings?.phone || defaultSite.phone)?.replace(/\s/g, '');
   const whatsapp = settings?.whatsapp_number || localUi.social?.whatsapp || defaultSite.whatsappNumber;
 
   const logo = settings?.logo_url || localUi.logoDataUrl;

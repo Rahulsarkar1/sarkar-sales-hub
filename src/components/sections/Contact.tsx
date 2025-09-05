@@ -8,7 +8,7 @@ export default function Contact() {
   
   const address = settings?.address || site.address;
   const phone = settings?.phone || site.phone;
-  const firstPhone = phone?.split(' / ')[0] || phone;
+  const firstPhone = (phone?.split(' / ')[0] || phone)?.replace(/\s/g, '');
   const email = settings?.email || site.email;
   const mapEmbedSrc = settings?.map_embed_src || site.mapEmbedSrc;
 

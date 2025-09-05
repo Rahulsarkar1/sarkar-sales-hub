@@ -4,9 +4,9 @@ import { site } from "@/config/site";
 
 export default function StickyActions() {
   const { settings } = useSiteSettings();
-  // Extract first phone number only 
+  // Extract first phone number only and clean for tel: links
   const phoneRaw = settings?.phone || site.phone;
-  const phone = phoneRaw?.split(' / ')[0] || phoneRaw;
+  const phone = (phoneRaw?.split(' / ')[0] || phoneRaw)?.replace(/\s/g, '');
   const whatsapp = settings?.whatsapp_number || site.whatsappNumber;
 
   const handleWhatsAppClick = () => {
