@@ -26,6 +26,8 @@ export type SiteSettings = {
   facebook_url: string | null;
   instagram_url: string | null;
   hero_background_image: string | null;
+  privacy_policy: string | null;
+  terms_conditions: string | null;
 };
 
 interface SiteSettingsContextValue {
@@ -50,7 +52,11 @@ export function SiteSettingsProvider({ children }: { children: React.ReactNode }
       .select("*")
       .eq("key", "default")
       .maybeSingle();
-    if (!error && data) setSettings(data as SiteSettings);
+    if (!error && data) setSettings({
+      ...data,
+      privacy_policy: (data as any).privacy_policy || null,
+      terms_conditions: (data as any).terms_conditions || null
+    } as SiteSettings);
     setLoading(false);
   };
 

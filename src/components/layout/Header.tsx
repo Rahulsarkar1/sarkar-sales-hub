@@ -9,6 +9,7 @@ import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { useLocalUi } from "@/context/LocalUiContext";
 import { useCatalog } from "@/hooks/use-catalog";
 import ProductDetailsDialog from "@/components/ProductDetailsDialog";
+import { Link } from "react-router-dom";
 
 type HeaderProps = {
   onSearch: (q: string) => void;
@@ -51,7 +52,7 @@ export default function Header({ onSearch }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b">
       <div className="container mx-auto flex items-center justify-between py-3 gap-4">
-        <a href="#" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           {logo ? (
             <img src={logo} alt={`${siteName} logo`} className="h-8 w-8 rounded-md border object-cover" />
           ) : (
@@ -63,7 +64,7 @@ export default function Header({ onSearch }: HeaderProps) {
             <div className="font-bold">{siteName}</div>
             <div className="text-xs text-muted-foreground">{siteTagline}</div>
           </div>
-        </a>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <a className="story-link" href={`#${sections.products}`}>Products</a>

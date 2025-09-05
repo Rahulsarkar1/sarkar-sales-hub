@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChevronLeft } from "lucide-react";
@@ -40,6 +40,11 @@ export default function CategoryProducts() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
   
   return (
     <HelmetProvider>

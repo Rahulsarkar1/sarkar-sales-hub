@@ -19,10 +19,19 @@ export default function Admin() {
   const { settings, updateSettings } = useSiteSettings();
 
   useEffect(() => {
+    // Force re-authentication by clearing any cached session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session?.user) {
+        setAuthed(false);
+      } else {
+        setAuthed(true);
+      }
+    });
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setAuthed(!!session?.user);
     });
-    supabase.auth.getSession().then(({ data: { session } }) => setAuthed(!!session?.user));
+    
     return () => subscription.unsubscribe();
   }, []);
 
@@ -84,6 +93,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   const [instagramUrl, setInstagramUrl] = useState(settingsState?.instagram_url ?? "");
   const [logoUrl, setLogoUrl] = useState(settingsState?.logo_url ?? "");
   const [contactInfo, setContactInfo] = useState(settingsState?.contact_info ?? "");
+  const [privacyPolicy, setPrivacyPolicy] = useState(settingsState?.privacy_policy ?? "");
+  const [termsConditions, setTermsConditions] = useState(settingsState?.terms_conditions ?? "");
 
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
@@ -105,6 +116,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
     setInstagramUrl(settingsState?.instagram_url ?? "");
     setLogoUrl(settingsState?.logo_url ?? "");
     setContactInfo(settingsState?.contact_info ?? "");
+    setPrivacyPolicy(settingsState?.privacy_policy ?? "");
+    setTermsConditions(settingsState?.terms_conditions ?? "");
   }, [settingsState]);
 
   const handleSave = async () => {
@@ -128,6 +141,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       hero_subtitle: heroSubtitle || null,
       primary_color: primaryColor || null,
       secondary_color: secondaryColor || null,
+      privacy_policy: privacyPolicy || null,
+      terms_conditions: termsConditions || null,
     });
     if (err) alert(`Error: ${err.message}`);
     else alert("Settings saved");
@@ -226,6 +241,26 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
         <div className="grid gap-2">
           <Label htmlFor="festiveImage">Festive image URL</Label>
           <Input id="festiveImage" value={festiveImage} onChange={(e) => setFestiveImage(e.target.value)} placeholder="https://..." />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="privacyPolicy">Privacy Policy</Label>
+          <textarea 
+            id="privacyPolicy" 
+            value={privacyPolicy} 
+            onChange={(e) => setPrivacyPolicy(e.target.value)} 
+            className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder="Enter your privacy policy content..."
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="termsConditions">Terms & Conditions</Label>
+          <textarea 
+            id="termsConditions" 
+            value={termsConditions} 
+            onChange={(e) => setTermsConditions(e.target.value)} 
+            className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder="Enter your terms & conditions content..."
+          />
         </div>
         <div className="pt-2">
           <Button onClick={handleSave} className="w-full sm:w-auto">Save Settings</Button>
