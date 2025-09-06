@@ -121,6 +121,11 @@ export default {
 				'gradient-fade-out': {
 					'0%': { opacity: '1' },
 					'100%': { opacity: '0' }
+				},
+				// Shimmer effect for loading states
+				'shimmer': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
 				}
 			},
 			animation: {
@@ -137,7 +142,8 @@ export default {
 				'bounce-top': 'bounce-top 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
 				'bounce-bottom': 'bounce-bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
 				'gradient-fade-in': 'gradient-fade-in 0.3s ease-out',
-				'gradient-fade-out': 'gradient-fade-out 0.3s ease-out'
+				'gradient-fade-out': 'gradient-fade-out 0.3s ease-out',
+				'shimmer': 'shimmer 2s ease-in-out infinite'
 			}
 		}
 	},
