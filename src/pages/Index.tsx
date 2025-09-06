@@ -6,17 +6,28 @@ import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import StickyActions from "@/components/StickyActions";
 import FestivePopup from "@/components/FestivePopup";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { sections, site } from "@/config/site";
 import { useCatalog } from "@/hooks/use-catalog";
 import type { Product } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
+import ShimmerLoading from "@/components/ShimmerLoading";
 
 export default function Index() {
   const [q, setQ] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const { categoriesList, productsByCategory } = useCatalog();
   const { settings } = useSiteSettings();
+
+  useEffect(() => {
+    // Show loading for initial page load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800); // Short delay to show shimmer
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -39,6 +50,11 @@ export default function Index() {
 
   const heroTitle = settings?.hero_title ?? "Power You Can Trust";
   const heroSubtitle = settings?.hero_subtitle ?? "Exide home/inverter batteries, car & bike batteries, and Microtek inverters with fast delivery, expert installation, and the best prices.";
+  
+  if (isLoading) {
+    return <ShimmerLoading />;
+  }
+  
   return (
     <HelmetProvider>
       <Helmet>
