@@ -16,18 +16,10 @@ import ShimmerLoading from "@/components/ShimmerLoading";
 
 export default function Index() {
   const [q, setQ] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const { categoriesList, productsByCategory } = useCatalog();
-  const { settings } = useSiteSettings();
+  const { categoriesList, productsByCategory, isLoading: catalogLoading } = useCatalog();
+  const { settings, loading: settingsLoading } = useSiteSettings();
 
-  useEffect(() => {
-    // Show loading for initial page load
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800); // Short delay to show shimmer
-
-    return () => clearTimeout(timer);
-  }, []);
+  const isLoading = catalogLoading || settingsLoading;
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -48,8 +40,8 @@ export default function Index() {
     return "exide" as const;
   };
 
-  const heroTitle = settings?.hero_title ?? "Power You Can Trust";
-  const heroSubtitle = settings?.hero_subtitle ?? "Exide home/inverter batteries, car & bike batteries, and Microtek inverters with fast delivery, expert installation, and the best prices.";
+  const heroTitle = settings?.hero_title || "";
+  const heroSubtitle = settings?.hero_subtitle || "";
   
   if (isLoading) {
     return <ShimmerLoading />;

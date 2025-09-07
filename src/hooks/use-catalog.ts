@@ -5,7 +5,7 @@ import { categories as defaultCategories, productsByCategory as defaultProductsB
 
 export function useCatalog() {
   // Remote segments
-  const { data: segments } = useQuery({
+  const { data: segments, isLoading: segmentsLoading } = useQuery({
     queryKey: ["segments"],
     queryFn: async () => {
       const { data, error } = await (supabase as any)
@@ -19,7 +19,7 @@ export function useCatalog() {
   });
 
   // Remote products
-  const { data: products } = useQuery({
+  const { data: products, isLoading: productsLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const { data, error } = await (supabase as any)
@@ -32,14 +32,15 @@ export function useCatalog() {
     },
   });
 
+  const isLoading = segmentsLoading || productsLoading;
   const hasRemote = (segments && segments.length > 0) && (products && products.length > 0);
 
   const categoriesList = hasRemote
     ? (segments!.map((s: any) => s.name) as readonly string[])
-    : defaultCategories;
+    : [];
 
   const productsByCategory: Record<string, Product[]> = useMemo(() => {
-    if (!hasRemote) return defaultProductsByCategory as unknown as Record<string, Product[]>;
+    if (!hasRemote) return {};
     // Group by segment_id then map name
     const segById: Record<string, string> = Object.fromEntries(segments!.map((s: any) => [s.id, s.name]));
     const out: Record<string, Product[]> = {};
@@ -57,5 +58,5 @@ export function useCatalog() {
     return out;
   }, [hasRemote, segments, products]);
 
-  return { categoriesList, productsByCategory } as const;
+  return { categoriesList, productsByCategory, isLoading } as const;
 }
