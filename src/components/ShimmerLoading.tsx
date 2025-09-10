@@ -14,11 +14,11 @@ const ProductCardShimmer = () => (
   </div>
 );
 
-const CategorySectionShimmer = ({ delay = 0 }: { delay?: number }) => (
-  <section className="py-10" style={{ animationDelay: `${delay}ms` }}>
+const CategorySectionShimmer = () => (
+  <section className="py-10">
     <div className="container mx-auto px-4">
       <Shimmer className="h-8 w-64 mb-6 rounded" />
-      <div className="relative p-4 rounded-lg border" style={{ boxShadow: "var(--shadow-elevated)" }}>
+      <div className="relative p-4 rounded-lg border glass-card">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <ProductCardShimmer key={i} />
@@ -165,7 +165,7 @@ export default function ShimmerLoading() {
         
         <div>
           {Array.from({ length: 4 }).map((_, i) => (
-            <CategorySectionShimmer key={i} delay={i * 100} />
+            <CategorySectionShimmer key={i} />
           ))}
         </div>
 
