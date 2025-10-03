@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      hero_slides: {
+        Row: {
+          created_at: string
+          duration_seconds: number
+          id: string
+          image_url: string
+          sort_order: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          image_url: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          image_url?: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       product_specs: {
         Row: {
           created_at: string

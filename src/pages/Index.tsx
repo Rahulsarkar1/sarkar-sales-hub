@@ -6,6 +6,7 @@ import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import StickyActions from "@/components/StickyActions";
 import FestivePopup from "@/components/FestivePopup";
+import HeroSlideshow from "@/components/HeroSlideshow";
 import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { sections, site } from "@/config/site";
@@ -72,10 +73,10 @@ export default function Index() {
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}
           <section className="relative md:overflow-hidden overflow-visible">
-            <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} aria-hidden />
+            <HeroSlideshow />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{heroTitle}</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mb-6">{heroSubtitle}</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">{heroTitle}</h1>
+              <p className="text-lg text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" asChild>
                   <a href={`#${sections.products}`}>Browse Products</a>
