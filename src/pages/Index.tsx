@@ -75,8 +75,8 @@ export default function Index() {
           <section className="relative md:overflow-hidden overflow-visible">
             <HeroSlideshow />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-lg">{heroTitle}</h1>
-              <p className="text-lg text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white drop-shadow-lg">{heroTitle}</h1>
+              <p className="text-lg text-gray-700 dark:text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" asChild>
                   <a href={`#${sections.products}`}>Browse Products</a>
