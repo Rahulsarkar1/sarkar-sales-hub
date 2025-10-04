@@ -14,6 +14,7 @@ import { useCatalog } from "@/hooks/use-catalog";
 import type { Product } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import ShimmerLoading from "@/components/ShimmerLoading";
+import { trackCTAClick } from "@/lib/analytics";
 
 export default function Index() {
   const [q, setQ] = useState("");
@@ -79,12 +80,18 @@ export default function Index() {
               <p className="text-lg text-gray-700 dark:text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" asChild>
-                  <a href={`#${sections.products}`}>Browse Products</a>
+                  <a 
+                    href={`#${sections.products}`}
+                    onClick={() => trackCTAClick('Browse Products', 'hero')}
+                  >
+                    Browse Products
+                  </a>
                 </Button>
                 <Button variant="outline" asChild>
                   <button
                     onClick={(e) => {
                       e.preventDefault();
+                      trackCTAClick('Get Best Price', 'hero');
                       const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
                       const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
                       

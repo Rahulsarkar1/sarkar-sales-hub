@@ -5,6 +5,7 @@ import LeadModal from "@/components/LeadModal";
 import ProductDetailsDialog from "@/components/ProductDetailsDialog";
 import { Product } from "@/data/products";
 import { formatCurrency } from "@/data/products";
+import { trackProductClick } from "@/lib/analytics";
 
 export default function ProductCard({ product }: { product: Product }) {
   const discounted = product.discountPercent
@@ -15,7 +16,10 @@ export default function ProductCard({ product }: { product: Product }) {
     <Card className="p-4 glass-card animate-fade-in">
       <div className="flex items-start gap-3">
         <ProductDetailsDialog product={product}>
-          <div className="flex items-start gap-3 cursor-pointer">
+          <div 
+            className="flex items-start gap-3 cursor-pointer"
+            onClick={() => trackProductClick(product.name)}
+          >
             <div className="w-24 md:w-28 aspect-square">
               <img
                 src={product.image}

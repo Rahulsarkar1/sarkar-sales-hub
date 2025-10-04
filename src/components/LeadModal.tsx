@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { site } from "@/config/site";
+import { trackLeadEnquiry } from "@/lib/analytics";
 
 export type LeadPayload = {
   productName: string;
@@ -33,6 +34,7 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
   };
 
   const handleWhatsAppClick = () => {
+    trackLeadEnquiry(productName, 'whatsapp');
     const url = makeWhatsAppUrl();
     
     // Better desktop support
@@ -60,7 +62,11 @@ export default function LeadModal({ productName, children }: LeadModalProps) {
         </div>
         <DialogFooter className="sm:justify-between">
           <Button variant="secondary" asChild>
-            <a href={`tel:${phone}`} aria-label="Call now">
+            <a 
+              href={`tel:${phone}`} 
+              aria-label="Call now"
+              onClick={() => trackLeadEnquiry(productName, 'phone')}
+            >
               Call Now
             </a>
           </Button>
