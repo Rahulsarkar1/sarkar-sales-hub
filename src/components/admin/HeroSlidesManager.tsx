@@ -20,10 +20,24 @@ export default function HeroSlidesManager() {
   const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [gradientDuration, setGradientDuration] = useState(5);
 
   useEffect(() => {
     loadSlides();
+    loadSettings();
   }, []);
+
+  const loadSettings = async () => {
+    const { data } = await supabase
+      .from("site_settings")
+      .select("hero_gradient_duration")
+      .eq("key", "default")
+      .single();
+
+    if (data?.hero_gradient_duration) {
+      setGradientDuration(data.hero_gradient_duration);
+    }
+  };
 
   const loadSlides = async () => {
     setLoading(true);
@@ -39,6 +53,21 @@ export default function HeroSlidesManager() {
       setSlides(data || []);
     }
     setLoading(false);
+  };
+
+  const updateGradientDuration = async (duration: number) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_gradient_duration: duration })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update gradient duration");
+      console.error(error);
+    } else {
+      toast.success("Gradient duration updated");
+      setGradientDuration(duration);
+    }
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,6 +214,30 @@ export default function HeroSlidesManager() {
       <p className="text-sm text-muted-foreground mb-4">
         Manage background images for the hero section. Images will auto-rotate based on the duration you set.
       </p>
+
+      {/* Gradient Duration Control */}
+      <div className="mb-6 p-4 border rounded-lg bg-muted/30">
+        <Label htmlFor="gradientDuration" className="text-sm font-medium mb-2 block">
+          Gradient Slide Duration (seconds)
+        </Label>
+        <div className="flex items-center gap-3">
+          <Input
+            id="gradientDuration"
+            type="number"
+            min="1"
+            max="60"
+            value={gradientDuration}
+            onChange={(e) => {
+              const val = parseInt(e.target.value) || 5;
+              updateGradientDuration(val);
+            }}
+            className="w-24"
+          />
+          <p className="text-xs text-muted-foreground">
+            How long the animated gradient background stays before switching to promotional slides
+          </p>
+        </div>
+      </div>
 
       <div className="mb-6">
         <Label htmlFor="slideUpload" className="cursor-pointer">

@@ -8,17 +8,32 @@ interface HeroSlide {
   sort_order: number;
 }
 
-export default function HeroSlideshow() {
+interface HeroSlideshowProps {
+  onSlideChange?: (index: number) => void;
+}
+
+export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
   const [dbSlides, setDbSlides] = useState<HeroSlide[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Gradient slide is always the first slide (index 0)
-  const GRADIENT_DURATION = 5; // seconds
+  const [gradientDuration, setGradientDuration] = useState(5);
 
   useEffect(() => {
     loadSlides();
+    loadSettings();
   }, []);
+
+  const loadSettings = async () => {
+    const { data } = await supabase
+      .from("site_settings")
+      .select("hero_gradient_duration")
+      .eq("key", "default")
+      .single();
+
+    if (data?.hero_gradient_duration) {
+      setGradientDuration(data.hero_gradient_duration);
+    }
+  };
 
   const loadSlides = async () => {
     const { data, error } = await supabase
@@ -46,7 +61,7 @@ export default function HeroSlideshow() {
     let duration: number;
     if (currentIndex === 0) {
       // Gradient slide
-      duration = GRADIENT_DURATION * 1000;
+      duration = gradientDuration * 1000;
     } else {
       // Database slide
       const dbSlideIndex = currentIndex - 1;
@@ -63,19 +78,19 @@ export default function HeroSlideshow() {
       }
       
       setCurrentIndex(nextIndex);
+      onSlideChange?.(nextIndex);
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [currentIndex, dbSlides, totalSlides, isLoading]);
+  }, [currentIndex, dbSlides, totalSlides, isLoading, gradientDuration, onSlideChange]);
 
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden>
-      {/* Gradient slide - always first (index 0) */}
+      {/* Gradient slide - always first (index 0) - Animated Stripe-style */}
       <div
-        className="absolute inset-0 transition-opacity duration-1000"
+        className="absolute inset-0 transition-opacity duration-1000 gradient-animated"
         style={{
           opacity: currentIndex === 0 ? 1 : 0,
-          background: "var(--gradient-hero)",
         }}
       />
       
@@ -94,8 +109,8 @@ export default function HeroSlideshow() {
         />
       ))}
       
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Overlay for better text readability - only on gradient slide */}
+      {currentIndex === 0 && <div className="absolute inset-0 bg-black/40" />}
     </div>
   );
 }

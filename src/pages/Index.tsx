@@ -18,6 +18,7 @@ import { trackCTAClick } from "@/lib/analytics";
 
 export default function Index() {
   const [q, setQ] = useState("");
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const { categoriesList, productsByCategory, isLoading: catalogLoading } = useCatalog();
   const { settings, loading: settingsLoading } = useSiteSettings();
 
@@ -74,10 +75,17 @@ export default function Index() {
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}
           <section className="relative md:overflow-hidden overflow-visible">
-            <HeroSlideshow />
+            <HeroSlideshow onSlideChange={setCurrentSlideIndex} />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white drop-shadow-lg">{heroTitle}</h1>
-              <p className="text-lg text-gray-700 dark:text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
+              {/* Only show hero text on gradient slide (index 0) */}
+              {currentSlideIndex === 0 && (
+                <>
+                  <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white drop-shadow-lg">{heroTitle}</h1>
+                  <p className="text-lg text-gray-700 dark:text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
+                </>
+              )}
+              
+              {/* Buttons always visible on all slides */}
               <div className="flex flex-wrap gap-3">
                 <Button variant="hero" asChild>
                   <a 
