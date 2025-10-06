@@ -74,7 +74,7 @@ export default function Index() {
 
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}
-          <section className="relative md:overflow-hidden overflow-visible min-h-[500px] md:min-h-[600px]">
+          <section className="relative md:overflow-hidden overflow-visible">
             <HeroSlideshow onSlideChange={setCurrentSlideIndex} />
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
               {/* Only show hero text on gradient slide (index 0) */}
