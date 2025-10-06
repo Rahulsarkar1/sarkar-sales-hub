@@ -21,6 +21,7 @@ export default function HeroSlidesManager() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [gradientDuration, setGradientDuration] = useState(5);
+  const [gradientAnimationDuration, setGradientAnimationDuration] = useState(90);
   const [gradientAnimated, setGradientAnimated] = useState(true);
   const [gradientVisible, setGradientVisible] = useState(true);
 
@@ -32,13 +33,16 @@ export default function HeroSlidesManager() {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible")
+      .select("hero_gradient_duration, hero_gradient_animation_duration, hero_gradient_animated, hero_gradient_visible")
       .eq("key", "default")
       .single();
 
     if (data) {
       if (data.hero_gradient_duration) {
         setGradientDuration(data.hero_gradient_duration);
+      }
+      if (data.hero_gradient_animation_duration) {
+        setGradientAnimationDuration(data.hero_gradient_animation_duration);
       }
       if (data.hero_gradient_animated !== undefined) {
         setGradientAnimated(data.hero_gradient_animated);
@@ -107,6 +111,21 @@ export default function HeroSlidesManager() {
     } else {
       setGradientVisible(visible);
       toast.success(visible ? "Gradient slide enabled" : "Gradient slide hidden");
+    }
+  };
+
+  const updateGradientAnimationDuration = async (duration: number) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_gradient_animation_duration: duration })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update animation duration");
+      console.error(error);
+    } else {
+      toast.success("Animation duration updated");
+      setGradientAnimationDuration(duration);
     }
   };
 
@@ -312,6 +331,31 @@ export default function HeroSlidesManager() {
               />
               <p className="text-xs text-muted-foreground">
                 How long the gradient stays before switching to promotional slides
+              </p>
+            </div>
+          </div>
+
+          {/* Gradient Animation Speed */}
+          <div className="border-t mt-2 pt-3">
+            <Label htmlFor="gradientAnimationDuration" className="text-sm font-medium mb-2 block">
+              Animation Speed (seconds)
+            </Label>
+            <div className="flex items-center gap-3">
+              <Input
+                id="gradientAnimationDuration"
+                type="number"
+                min="10"
+                max="300"
+                value={gradientAnimationDuration}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 90;
+                  updateGradientAnimationDuration(val);
+                }}
+                className="w-24"
+                disabled={!gradientVisible || !gradientAnimated}
+              />
+              <p className="text-xs text-muted-foreground">
+                How fast colors transition (higher = slower, more professional)
               </p>
             </div>
           </div>
