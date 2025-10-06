@@ -21,6 +21,8 @@ export default function HeroSlidesManager() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [gradientDuration, setGradientDuration] = useState(5);
+  const [gradientAnimated, setGradientAnimated] = useState(true);
+  const [gradientVisible, setGradientVisible] = useState(true);
 
   useEffect(() => {
     loadSlides();
@@ -30,12 +32,20 @@ export default function HeroSlidesManager() {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration")
+      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible")
       .eq("key", "default")
       .single();
 
-    if (data?.hero_gradient_duration) {
-      setGradientDuration(data.hero_gradient_duration);
+    if (data) {
+      if (data.hero_gradient_duration) {
+        setGradientDuration(data.hero_gradient_duration);
+      }
+      if (data.hero_gradient_animated !== undefined) {
+        setGradientAnimated(data.hero_gradient_animated);
+      }
+      if (data.hero_gradient_visible !== undefined) {
+        setGradientVisible(data.hero_gradient_visible);
+      }
     }
   };
 
@@ -67,6 +77,36 @@ export default function HeroSlidesManager() {
     } else {
       toast.success("Gradient duration updated");
       setGradientDuration(duration);
+    }
+  };
+
+  const updateGradientAnimated = async (animated: boolean) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_gradient_animated: animated })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update gradient animation");
+      console.error(error);
+    } else {
+      setGradientAnimated(animated);
+      toast.success(animated ? "Gradient animation enabled" : "Gradient animation disabled");
+    }
+  };
+
+  const updateGradientVisible = async (visible: boolean) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_gradient_visible: visible })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update gradient visibility");
+      console.error(error);
+    } else {
+      setGradientVisible(visible);
+      toast.success(visible ? "Gradient slide enabled" : "Gradient slide hidden");
     }
   };
 
@@ -215,27 +255,66 @@ export default function HeroSlidesManager() {
         Manage background images for the hero section. Images will auto-rotate based on the duration you set.
       </p>
 
-      {/* Gradient Duration Control */}
-      <div className="mb-6 p-4 border rounded-lg bg-muted/30">
-        <Label htmlFor="gradientDuration" className="text-sm font-medium mb-2 block">
-          Gradient Slide Duration (seconds)
-        </Label>
-        <div className="flex items-center gap-3">
-          <Input
-            id="gradientDuration"
-            type="number"
-            min="1"
-            max="60"
-            value={gradientDuration}
-            onChange={(e) => {
-              const val = parseInt(e.target.value) || 5;
-              updateGradientDuration(val);
-            }}
-            className="w-24"
-          />
-          <p className="text-xs text-muted-foreground">
-            How long the animated gradient background stays before switching to promotional slides
-          </p>
+      {/* Gradient Settings */}
+      <div className="mb-6 p-4 border rounded-lg bg-muted/30 space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold mb-3">Gradient Slide Settings</h3>
+          
+          {/* Show Gradient */}
+          <div className="flex items-center justify-between py-2">
+            <div className="space-y-0.5">
+              <Label htmlFor="gradientVisible" className="text-sm">Show Gradient Slide</Label>
+              <p className="text-xs text-muted-foreground">
+                Display the gradient background in the hero slideshow
+              </p>
+            </div>
+            <Switch
+              id="gradientVisible"
+              checked={gradientVisible}
+              onCheckedChange={updateGradientVisible}
+            />
+          </div>
+
+          {/* Animated Gradient */}
+          <div className="flex items-center justify-between py-2 border-t mt-2 pt-2">
+            <div className="space-y-0.5">
+              <Label htmlFor="gradientAnimated" className="text-sm">Enable Animated Gradient</Label>
+              <p className="text-xs text-muted-foreground">
+                Use smooth color-changing animation or static gradient
+              </p>
+            </div>
+            <Switch
+              id="gradientAnimated"
+              checked={gradientAnimated}
+              onCheckedChange={updateGradientAnimated}
+              disabled={!gradientVisible}
+            />
+          </div>
+
+          {/* Gradient Duration */}
+          <div className="border-t mt-2 pt-3">
+            <Label htmlFor="gradientDuration" className="text-sm font-medium mb-2 block">
+              Gradient Slide Duration (seconds)
+            </Label>
+            <div className="flex items-center gap-3">
+              <Input
+                id="gradientDuration"
+                type="number"
+                min="1"
+                max="60"
+                value={gradientDuration}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 5;
+                  updateGradientDuration(val);
+                }}
+                className="w-24"
+                disabled={!gradientVisible}
+              />
+              <p className="text-xs text-muted-foreground">
+                How long the gradient stays before switching to promotional slides
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

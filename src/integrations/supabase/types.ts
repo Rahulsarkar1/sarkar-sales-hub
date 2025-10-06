@@ -223,7 +223,9 @@ export type Database = {
           festive_enabled: boolean | null
           festive_image_url: string | null
           hero_background_image: string | null
+          hero_gradient_animated: boolean | null
           hero_gradient_duration: number
+          hero_gradient_visible: boolean | null
           hero_subtitle: string | null
           hero_title: string | null
           instagram_url: string | null
@@ -250,7 +252,9 @@ export type Database = {
           festive_enabled?: boolean | null
           festive_image_url?: string | null
           hero_background_image?: string | null
+          hero_gradient_animated?: boolean | null
           hero_gradient_duration?: number
+          hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
           hero_title?: string | null
           instagram_url?: string | null
@@ -277,7 +281,9 @@ export type Database = {
           festive_enabled?: boolean | null
           festive_image_url?: string | null
           hero_background_image?: string | null
+          hero_gradient_animated?: boolean | null
           hero_gradient_duration?: number
+          hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
           hero_title?: string | null
           instagram_url?: string | null
