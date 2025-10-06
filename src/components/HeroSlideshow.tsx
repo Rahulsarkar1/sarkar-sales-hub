@@ -120,12 +120,20 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
             className="absolute inset-0 transition-opacity duration-1000"
             style={{
               opacity: currentIndex === slideIndex ? 1 : 0,
-              backgroundImage: `url(${slide.image_url})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
             }}
-          />
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url(${slide.image_url})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            />
+            {/* Overlay for better text readability on promotional images */}
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
         );
       })}
       
