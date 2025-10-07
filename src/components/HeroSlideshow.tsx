@@ -19,6 +19,7 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
   const [gradientDuration, setGradientDuration] = useState(5);
   const [gradientAnimated, setGradientAnimated] = useState(true);
   const [gradientVisible, setGradientVisible] = useState(true);
+  const [gradientAnimationDuration, setGradientAnimationDuration] = useState(90);
 
   useEffect(() => {
     loadSlides();
@@ -28,7 +29,7 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible")
+      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration")
       .eq("key", "default")
       .single();
 
@@ -41,6 +42,9 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
       }
       if (data.hero_gradient_visible !== undefined) {
         setGradientVisible(data.hero_gradient_visible);
+      }
+      if (data.hero_gradient_animation_duration) {
+        setGradientAnimationDuration(data.hero_gradient_animation_duration);
       }
     }
   };
@@ -107,6 +111,7 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
           }`}
           style={{
             opacity: currentIndex === 0 ? 1 : 0,
+            animationDuration: `${gradientAnimationDuration}s`,
           }}
         />
       )}
@@ -126,7 +131,7 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
               className="absolute inset-0"
               style={{
                 backgroundImage: `url(${slide.image_url})`,
-                backgroundSize: "cover",
+                backgroundSize: "contain",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
               }}

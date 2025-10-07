@@ -165,36 +165,80 @@ All colors MUST be HSL.
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Animated gradient for hero section */
+  /* Animated gradient for hero section - smooth professional transitions */
   @keyframes gradient-shift {
-    0%, 100% {
+    0% {
       background: linear-gradient(135deg, 
-        hsl(220, 65%, 45%) 0%,
-        hsl(260, 60%, 50%) 50%,
-        hsl(200, 68%, 48%) 100%
+        hsl(220, 70%, 40%) 0%,
+        hsl(230, 68%, 42%) 25%,
+        hsl(240, 65%, 45%) 50%,
+        hsl(250, 63%, 48%) 75%,
+        hsl(260, 60%, 50%) 100%
       );
     }
-    33% {
+    16.67% {
+      background: linear-gradient(135deg, 
+        hsl(240, 65%, 45%) 0%,
+        hsl(250, 63%, 48%) 25%,
+        hsl(260, 60%, 50%) 50%,
+        hsl(230, 68%, 48%) 75%,
+        hsl(200, 70%, 48%) 100%
+      );
+    }
+    33.33% {
       background: linear-gradient(135deg, 
         hsl(260, 60%, 50%) 0%,
-        hsl(200, 68%, 48%) 50%,
-        hsl(180, 62%, 45%) 100%
+        hsl(230, 68%, 48%) 25%,
+        hsl(200, 70%, 48%) 50%,
+        hsl(190, 68%, 47%) 75%,
+        hsl(180, 65%, 45%) 100%
       );
     }
-    66% {
+    50% {
       background: linear-gradient(135deg, 
-        hsl(200, 68%, 48%) 0%,
-        hsl(180, 62%, 45%) 50%,
-        hsl(220, 65%, 45%) 100%
+        hsl(200, 70%, 48%) 0%,
+        hsl(190, 68%, 47%) 25%,
+        hsl(180, 65%, 45%) 50%,
+        hsl(185, 67%, 46%) 75%,
+        hsl(190, 70%, 50%) 100%
+      );
+    }
+    66.67% {
+      background: linear-gradient(135deg, 
+        hsl(180, 65%, 45%) 0%,
+        hsl(185, 67%, 46%) 25%,
+        hsl(190, 70%, 50%) 50%,
+        hsl(210, 68%, 47%) 75%,
+        hsl(220, 70%, 40%) 100%
+      );
+    }
+    83.33% {
+      background: linear-gradient(135deg, 
+        hsl(190, 70%, 50%) 0%,
+        hsl(210, 68%, 47%) 25%,
+        hsl(220, 70%, 40%) 50%,
+        hsl(225, 68%, 42%) 75%,
+        hsl(230, 68%, 42%) 100%
+      );
+    }
+    100% {
+      background: linear-gradient(135deg, 
+        hsl(220, 70%, 40%) 0%,
+        hsl(230, 68%, 42%) 25%,
+        hsl(240, 65%, 45%) 50%,
+        hsl(250, 63%, 48%) 75%,
+        hsl(260, 60%, 50%) 100%
       );
     }
   }
 
   .gradient-animated {
     background: linear-gradient(135deg, 
-      hsl(220, 65%, 45%) 0%,
-      hsl(260, 60%, 50%) 50%,
-      hsl(200, 68%, 48%) 100%
+      hsl(220, 70%, 40%) 0%,
+      hsl(230, 68%, 42%) 25%,
+      hsl(240, 65%, 45%) 50%,
+      hsl(250, 63%, 48%) 75%,
+      hsl(260, 60%, 50%) 100%
     );
     background-size: 200% 200%;
     animation: gradient-shift 90s ease-in-out infinite;
