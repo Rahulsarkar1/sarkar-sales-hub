@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
@@ -14,16 +15,30 @@ import Auth from "./pages/Auth";
 import CategoryProducts from "./pages/CategoryProducts";
 import Footer from "@/components/layout/Footer";
 import { SettingsProvider } from "@/context/SettingsContext";
-import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
+import { SiteSettingsProvider, useSiteSettings } from "@/context/SiteSettingsContext";
 import { LocalUiProvider } from "@/context/LocalUiContext";
 
 const queryClient = new QueryClient();
+
+function ThemeSync() {
+  const { settings } = useSiteSettings();
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    if (settings?.site_theme) {
+      setTheme(settings.site_theme);
+    }
+  }, [settings?.site_theme, setTheme]);
+
+  return null;
+}
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <SiteSettingsProvider>
+          <ThemeSync />
           <SettingsProvider>
             <LocalUiProvider>
               <TooltipProvider>

@@ -226,6 +226,7 @@ export type Database = {
           hero_gradient_animated: boolean | null
           hero_gradient_animation_duration: number
           hero_gradient_duration: number
+          hero_gradient_font_color: string | null
           hero_gradient_visible: boolean | null
           hero_subtitle: string | null
           hero_title: string | null
@@ -237,6 +238,7 @@ export type Database = {
           primary_color: string | null
           secondary_color: string | null
           site_name: string
+          site_theme: string | null
           tagline: string | null
           updated_at: string
           whatsapp_number: string | null
@@ -256,6 +258,7 @@ export type Database = {
           hero_gradient_animated?: boolean | null
           hero_gradient_animation_duration?: number
           hero_gradient_duration?: number
+          hero_gradient_font_color?: string | null
           hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
           hero_title?: string | null
@@ -267,6 +270,7 @@ export type Database = {
           primary_color?: string | null
           secondary_color?: string | null
           site_name?: string
+          site_theme?: string | null
           tagline?: string | null
           updated_at?: string
           whatsapp_number?: string | null
@@ -286,6 +290,7 @@ export type Database = {
           hero_gradient_animated?: boolean | null
           hero_gradient_animation_duration?: number
           hero_gradient_duration?: number
+          hero_gradient_font_color?: string | null
           hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
           hero_title?: string | null
@@ -297,6 +302,7 @@ export type Database = {
           primary_color?: string | null
           secondary_color?: string | null
           site_name?: string
+          site_theme?: string | null
           tagline?: string | null
           updated_at?: string
           whatsapp_number?: string | null

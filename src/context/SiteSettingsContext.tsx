@@ -28,6 +28,8 @@ export type SiteSettings = {
   hero_background_image: string | null;
   privacy_policy: string | null;
   terms_conditions: string | null;
+  hero_gradient_font_color: string | null;
+  site_theme: string | null;
 };
 
 interface SiteSettingsContextValue {

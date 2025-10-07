@@ -10,9 +10,10 @@ interface HeroSlide {
 
 interface HeroSlideshowProps {
   onSlideChange?: (index: number) => void;
+  onFontColorLoad?: (color: string) => void;
 }
 
-export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
+export default function HeroSlideshow({ onSlideChange, onFontColorLoad }: HeroSlideshowProps) {
   const [dbSlides, setDbSlides] = useState<HeroSlide[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +30,7 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration")
+      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration, hero_gradient_font_color")
       .eq("key", "default")
       .single();
 
@@ -45,6 +46,9 @@ export default function HeroSlideshow({ onSlideChange }: HeroSlideshowProps) {
       }
       if (data.hero_gradient_animation_duration) {
         setGradientAnimationDuration(data.hero_gradient_animation_duration);
+      }
+      if (data.hero_gradient_font_color) {
+        onFontColorLoad?.(data.hero_gradient_font_color);
       }
     }
   };

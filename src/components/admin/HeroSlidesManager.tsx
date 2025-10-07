@@ -24,6 +24,8 @@ export default function HeroSlidesManager() {
   const [gradientAnimated, setGradientAnimated] = useState(true);
   const [gradientVisible, setGradientVisible] = useState(true);
   const [gradientAnimationDuration, setGradientAnimationDuration] = useState(90);
+  const [gradientFontColor, setGradientFontColor] = useState("#FFFFFF");
+  const [siteTheme, setSiteTheme] = useState<string>("light");
 
   useEffect(() => {
     loadSlides();
@@ -33,7 +35,7 @@ export default function HeroSlidesManager() {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration")
+      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration, hero_gradient_font_color, site_theme")
       .eq("key", "default")
       .single();
 
@@ -49,6 +51,12 @@ export default function HeroSlidesManager() {
       }
       if (data.hero_gradient_animation_duration) {
         setGradientAnimationDuration(data.hero_gradient_animation_duration);
+      }
+      if (data.hero_gradient_font_color) {
+        setGradientFontColor(data.hero_gradient_font_color);
+      }
+      if (data.site_theme) {
+        setSiteTheme(data.site_theme);
       }
     }
   };
@@ -126,6 +134,36 @@ export default function HeroSlidesManager() {
     } else {
       setGradientAnimationDuration(duration);
       toast.success("Animation speed updated");
+    }
+  };
+
+  const updateGradientFontColor = async (color: string) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_gradient_font_color: color })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update font color");
+      console.error(error);
+    } else {
+      setGradientFontColor(color);
+      toast.success("Font color updated");
+    }
+  };
+
+  const updateSiteTheme = async (theme: string) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ site_theme: theme })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update theme");
+      console.error(error);
+    } else {
+      setSiteTheme(theme);
+      toast.success("Theme updated");
     }
   };
 
@@ -360,6 +398,82 @@ export default function HeroSlidesManager() {
                 How fast colors transition (10-300s). Higher = slower, more subtle
               </p>
             </div>
+          </div>
+
+          {/* Font Color */}
+          <div className="border-t mt-2 pt-3">
+            <Label htmlFor="fontColor" className="text-sm font-medium mb-2 block">
+              Gradient Hero Font Color
+            </Label>
+            <div className="flex items-center gap-3">
+              <Input
+                id="fontColor"
+                type="color"
+                value={gradientFontColor}
+                onChange={(e) => updateGradientFontColor(e.target.value)}
+                className="w-24 h-10 cursor-pointer"
+                disabled={!gradientVisible}
+              />
+              <Input
+                type="text"
+                value={gradientFontColor}
+                onChange={(e) => updateGradientFontColor(e.target.value)}
+                className="w-32"
+                disabled={!gradientVisible}
+              />
+              <p className="text-xs text-muted-foreground">
+                Text color only for gradient slide (not promotional slides)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Site Theme Settings */}
+      <div className="mb-6 p-4 border rounded-lg bg-muted/30 space-y-4">
+        <div>
+          <h3 className="text-sm font-semibold mb-3">Site Theme</h3>
+          
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">Default Theme</Label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="theme"
+                  value="light"
+                  checked={siteTheme === "light"}
+                  onChange={(e) => updateSiteTheme(e.target.value)}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm">Light Mode</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="theme"
+                  value="dark"
+                  checked={siteTheme === "dark"}
+                  onChange={(e) => updateSiteTheme(e.target.value)}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm">Dark Mode</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="theme"
+                  value="system"
+                  checked={siteTheme === "system"}
+                  onChange={(e) => updateSiteTheme(e.target.value)}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm">System</span>
+              </label>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Choose the default theme for your site. System will follow the user's OS preference.
+            </p>
           </div>
         </div>
       </div>

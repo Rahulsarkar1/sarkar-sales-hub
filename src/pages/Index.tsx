@@ -19,6 +19,7 @@ import { trackCTAClick } from "@/lib/analytics";
 export default function Index() {
   const [q, setQ] = useState("");
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [heroGradientFontColor, setHeroGradientFontColor] = useState("#FFFFFF");
   const { categoriesList, productsByCategory, isLoading: catalogLoading } = useCatalog();
   const { settings, loading: settingsLoading } = useSiteSettings();
 
@@ -74,45 +75,64 @@ export default function Index() {
 
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}
-          <section className="relative h-[500px] md:h-[600px] overflow-hidden">
-            <HeroSlideshow onSlideChange={setCurrentSlideIndex} />
-            <div className="container mx-auto px-4 py-16 md:py-24 relative">
-              {/* Only show hero text on gradient slide (index 0) */}
-              {currentSlideIndex === 0 && (
-                <>
-                  <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white drop-shadow-lg">{heroTitle}</h1>
-                  <p className="text-lg text-gray-700 dark:text-white/90 max-w-2xl mb-6 drop-shadow-lg">{heroSubtitle}</p>
-                </>
-              )}
-              
-              {/* Buttons always visible on all slides */}
-              <div className="flex flex-wrap gap-3">
-                <Button variant="hero" asChild>
-                  <a 
-                    href={`#${sections.products}`}
-                    onClick={() => trackCTAClick('Browse Products', 'hero')}
-                  >
-                    Browse Products
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      trackCTAClick('Get Best Price', 'hero');
-                      const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
-                      const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
-                      
-                      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                        window.location.href = url;
-                      } else {
-                        window.open(url, '_blank');
-                      }
-                    }}
-                  >
-                    Get Best Price
-                  </button>
-                </Button>
+          <section className="relative h-[400px] md:h-[500px] overflow-hidden">
+            <HeroSlideshow 
+              onSlideChange={setCurrentSlideIndex} 
+              onFontColorLoad={setHeroGradientFontColor}
+            />
+            
+            {/* Hero Content - positioned at bottom */}
+            <div className="absolute inset-0 flex items-end">
+              <div className="container mx-auto px-4 py-8 md:py-12 w-full">
+                <div className="max-w-3xl space-y-6">
+                  {/* Only show hero text on gradient slide (index 0) */}
+                  {currentSlideIndex === 0 && (
+                    <>
+                      <h1 
+                        className="text-4xl md:text-5xl font-bold drop-shadow-lg"
+                        style={{ color: heroGradientFontColor }}
+                      >
+                        {heroTitle}
+                      </h1>
+                      <p 
+                        className="text-lg md:text-xl max-w-2xl drop-shadow-lg"
+                        style={{ color: heroGradientFontColor }}
+                      >
+                        {heroSubtitle}
+                      </p>
+                    </>
+                  )}
+                  
+                  {/* Buttons always visible on all slides */}
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="hero" asChild>
+                      <a 
+                        href={`#${sections.products}`}
+                        onClick={() => trackCTAClick('Browse Products', 'hero')}
+                      >
+                        Browse Products
+                      </a>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          trackCTAClick('Get Best Price', 'hero');
+                          const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
+                          const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
+                          
+                          if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                            window.location.href = url;
+                          } else {
+                            window.open(url, '_blank');
+                          }
+                        }}
+                      >
+                        Get Best Price
+                      </button>
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
