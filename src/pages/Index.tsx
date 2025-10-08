@@ -94,8 +94,8 @@ export default function Index() {
               onFontColorLoad={setHeroGradientFontColor}
             />
             
-            {/* Hero Content - positioned dynamically */}
-            <div className={`absolute inset-0 flex ${getPositionClass()}`}>
+            {/* Hero Content - TEXT ONLY - positioned dynamically */}
+            <div className={`absolute inset-0 flex ${getPositionClass()} pointer-events-none`}>
               <div className="container mx-auto px-4 py-8 md:py-12 w-full">
                 <div className="max-w-3xl space-y-6">
                   {/* Only show hero text on gradient slide (index 0) */}
@@ -115,36 +115,40 @@ export default function Index() {
                       </p>
                     </>
                   )}
-                  
-                  {/* Buttons always visible on all slides */}
-                  <div className="flex flex-wrap gap-3">
-                    <Button variant="hero" asChild>
-                      <a 
-                        href={`#${sections.products}`}
-                        onClick={() => trackCTAClick('Browse Products', 'hero')}
-                      >
-                        Browse Products
-                      </a>
-                    </Button>
-                    <Button variant="outline" asChild>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          trackCTAClick('Get Best Price', 'hero');
-                          const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
-                          const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
-                          
-                          if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                            window.location.href = url;
-                          } else {
-                            window.open(url, '_blank');
-                          }
-                        }}
-                      >
-                        Get Best Price
-                      </button>
-                    </Button>
-                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Buttons - FIXED at bottom - always visible on all slides */}
+            <div className="absolute bottom-8 left-0 w-full pointer-events-auto">
+              <div className="container mx-auto px-4">
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="hero" asChild>
+                    <a 
+                      href={`#${sections.products}`}
+                      onClick={() => trackCTAClick('Browse Products', 'hero')}
+                    >
+                      Browse Products
+                    </a>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        trackCTAClick('Get Best Price', 'hero');
+                        const text = encodeURIComponent('Hi! I want the best price for an inverter/battery.');
+                        const url = `https://wa.me/${settings?.whatsapp_number || site.whatsappNumber}?text=${text}`;
+                        
+                        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                          window.location.href = url;
+                        } else {
+                          window.open(url, '_blank');
+                        }
+                      }}
+                    >
+                      Get Best Price
+                    </button>
+                  </Button>
                 </div>
               </div>
             </div>
