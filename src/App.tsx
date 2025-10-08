@@ -44,8 +44,6 @@ const App = () => {
           <SettingsProvider>
             <LocalUiProvider>
               <TooltipProvider>
-                <Toaster />
-                <Sonner />
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Index />} />
@@ -60,6 +58,8 @@ const App = () => {
                   </Routes>
                   <Footer />
                 </BrowserRouter>
+                <Toaster />
+                <Sonner />
               </TooltipProvider>
             </LocalUiProvider>
           </SettingsProvider>
