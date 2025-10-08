@@ -26,6 +26,7 @@ export default function HeroSlidesManager() {
   const [gradientAnimationDuration, setGradientAnimationDuration] = useState(90);
   const [gradientFontColor, setGradientFontColor] = useState("#FFFFFF");
   const [siteTheme, setSiteTheme] = useState<string>("light");
+  const [heroContentPosition, setHeroContentPosition] = useState("bottom");
 
   useEffect(() => {
     loadSlides();
@@ -35,7 +36,7 @@ export default function HeroSlidesManager() {
   const loadSettings = async () => {
     const { data } = await supabase
       .from("site_settings")
-      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration, hero_gradient_font_color, site_theme")
+      .select("hero_gradient_duration, hero_gradient_animated, hero_gradient_visible, hero_gradient_animation_duration, hero_gradient_font_color, site_theme, hero_content_position")
       .eq("key", "default")
       .single();
 
@@ -57,6 +58,9 @@ export default function HeroSlidesManager() {
       }
       if (data.site_theme) {
         setSiteTheme(data.site_theme);
+      }
+      if (data.hero_content_position) {
+        setHeroContentPosition(data.hero_content_position);
       }
     }
   };
@@ -163,7 +167,22 @@ export default function HeroSlidesManager() {
       console.error(error);
     } else {
       setSiteTheme(theme);
-      toast.success("Theme updated");
+      toast.success("Theme updated - refresh page to see changes");
+    }
+  };
+
+  const updateHeroContentPosition = async (position: string) => {
+    const { error } = await supabase
+      .from("site_settings")
+      .update({ hero_content_position: position })
+      .eq("key", "default");
+
+    if (error) {
+      toast.error("Failed to update hero content position");
+      console.error(error);
+    } else {
+      setHeroContentPosition(position);
+      toast.success("Hero content position updated successfully");
     }
   };
 
@@ -426,10 +445,50 @@ export default function HeroSlidesManager() {
               </p>
             </div>
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {/* Site Theme Settings */}
+          {/* Hero Content Position */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">Hero Content Position</label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="heroContentPosition"
+                  value="top"
+                  checked={heroContentPosition === "top"}
+                  onChange={(e) => updateHeroContentPosition(e.target.value)}
+                  className="cursor-pointer"
+                />
+                <span>Top</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="heroContentPosition"
+                  value="center"
+                  checked={heroContentPosition === "center"}
+                  onChange={(e) => updateHeroContentPosition(e.target.value)}
+                  className="cursor-pointer"
+                />
+                <span>Center</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="heroContentPosition"
+                  value="bottom"
+                  checked={heroContentPosition === "bottom"}
+                  onChange={(e) => updateHeroContentPosition(e.target.value)}
+                  className="cursor-pointer"
+                />
+                <span>Bottom</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Site Theme Settings */}
       <div className="mb-6 p-4 border rounded-lg bg-muted/30 space-y-4">
         <div>
           <h3 className="text-sm font-semibold mb-3">Site Theme</h3>

@@ -27,6 +27,8 @@ function ThemeSync() {
   useEffect(() => {
     if (settings?.site_theme) {
       setTheme(settings.site_theme);
+      // Force localStorage update to persist theme
+      localStorage.setItem('vite-ui-theme', settings.site_theme);
     }
   }, [settings?.site_theme, setTheme]);
 

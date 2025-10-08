@@ -30,6 +30,7 @@ export type SiteSettings = {
   terms_conditions: string | null;
   hero_gradient_font_color: string | null;
   site_theme: string | null;
+  hero_content_position: string | null;
 };
 
 interface SiteSettingsContextValue {

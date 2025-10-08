@@ -46,6 +46,19 @@ export default function Index() {
 
   const heroTitle = settings?.hero_title || "";
   const heroSubtitle = settings?.hero_subtitle || "";
+  const heroContentPosition = settings?.hero_content_position || "bottom";
+  
+  const getPositionClass = () => {
+    switch (heroContentPosition) {
+      case 'top':
+        return 'items-start';
+      case 'center':
+        return 'items-center';
+      case 'bottom':
+      default:
+        return 'items-end';
+    }
+  };
   
   if (isLoading) {
     return <ShimmerLoading />;
@@ -81,8 +94,8 @@ export default function Index() {
               onFontColorLoad={setHeroGradientFontColor}
             />
             
-            {/* Hero Content - positioned at bottom */}
-            <div className="absolute inset-0 flex items-end">
+            {/* Hero Content - positioned dynamically */}
+            <div className={`absolute inset-0 flex ${getPositionClass()}`}>
               <div className="container mx-auto px-4 py-8 md:py-12 w-full">
                 <div className="max-w-3xl space-y-6">
                   {/* Only show hero text on gradient slide (index 0) */}
