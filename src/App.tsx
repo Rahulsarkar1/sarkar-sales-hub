@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, useTheme } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
@@ -23,12 +23,13 @@ const queryClient = new QueryClient();
 function ThemeSync() {
   const { settings } = useSiteSettings();
   const { setTheme } = useTheme();
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    if (settings?.site_theme) {
+    // Only set theme from database on first load, not on every update
+    if (settings?.site_theme && !hasInitialized.current) {
       setTheme(settings.site_theme);
-      // Force localStorage update to persist theme
-      localStorage.setItem('vite-ui-theme', settings.site_theme);
+      hasInitialized.current = true;
     }
   }, [settings?.site_theme, setTheme]);
 

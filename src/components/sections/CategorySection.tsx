@@ -65,8 +65,6 @@ export default function CategorySection({
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious aria-label="Previous products" />
-              <CarouselNext aria-label="Next products" />
             </Carousel>
           ) : (
             <div className="grid grid-cols-1 gap-4">
