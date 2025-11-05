@@ -47,7 +47,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 )}
               </div>
               <LeadModal productName={product.name}>
-                <Button variant="hero" className="w-full" onClick={(e) => e.stopPropagation()}>Buy / Enquire</Button>
+                <Button variant="hero" className="min-w-[140px]" onClick={(e) => e.stopPropagation()}>Buy / Enquire</Button>
               </LeadModal>
             </div>
           </div>
