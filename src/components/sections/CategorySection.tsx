@@ -23,7 +23,7 @@ export default function CategorySection({
   fullProducts?: Product[];
 }) {
   const isMobile = useIsMobile();
-  const slides = chunk(products, 3);
+  const slides = chunk(products, isMobile ? 3 : 4);
   
   // Convert category title to URL-safe format (handle special characters)
   const categoryPath = title.replace(/\s+/g, '-').replace(/\//g, '%2F').replace(/&/g, '%26').toLowerCase();
@@ -54,10 +54,10 @@ export default function CategorySection({
           {/* On mobile: remove fixed height and avoid trapping scroll by not forcing vertical carousel height */}
           {!isMobile ? (
             <Carousel orientation="vertical" className="relative">
-              <CarouselContent className="h-[560px]">
+              <CarouselContent className="h-[400px]">
                 {slides.map((group, idx) => (
                   <CarouselItem key={idx} className="basis-full">
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-2 gap-6">
                       {group.map((p) => (
                         <ProductCard key={p.id} product={p} />
                       ))}
