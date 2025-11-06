@@ -31,14 +31,14 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold leading-snug mb-1">{product.name}</h3>
-              <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <div className="flex items-center gap-1.5 mb-2">
                 {product.discountPercent ? (
                   <>
                     <span className="text-muted-foreground line-through text-sm">
                       {formatCurrency(product.price)}
                     </span>
                     <span className="font-bold">{formatCurrency(discounted)}</span>
-                    <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground font-bold px-2 py-0.5 text-[10px] md:text-xs">
+                    <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground font-bold px-1.5 py-0.5 text-[9px] whitespace-nowrap">
                       -{product.discountPercent}%
                     </span>
                   </>
