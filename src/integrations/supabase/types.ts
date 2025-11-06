@@ -237,10 +237,12 @@ export type Database = {
           map_embed_src: string | null
           phone: string | null
           primary_color: string | null
+          privacy_policy: string | null
           secondary_color: string | null
           site_name: string
           site_theme: string | null
           tagline: string | null
+          terms_conditions: string | null
           updated_at: string
           whatsapp_number: string | null
         }
@@ -270,10 +272,12 @@ export type Database = {
           map_embed_src?: string | null
           phone?: string | null
           primary_color?: string | null
+          privacy_policy?: string | null
           secondary_color?: string | null
           site_name?: string
           site_theme?: string | null
           tagline?: string | null
+          terms_conditions?: string | null
           updated_at?: string
           whatsapp_number?: string | null
         }
@@ -303,10 +307,12 @@ export type Database = {
           map_embed_src?: string | null
           phone?: string | null
           primary_color?: string | null
+          privacy_policy?: string | null
           secondary_color?: string | null
           site_name?: string
           site_theme?: string | null
           tagline?: string | null
+          terms_conditions?: string | null
           updated_at?: string
           whatsapp_number?: string | null
         }

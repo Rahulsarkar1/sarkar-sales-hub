@@ -244,25 +244,34 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
           <Label htmlFor="festiveImage">Festive image URL</Label>
           <Input id="festiveImage" value={festiveImage} onChange={(e) => setFestiveImage(e.target.value)} placeholder="https://..." />
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="privacyPolicy">Privacy Policy</Label>
-          <textarea 
-            id="privacyPolicy" 
-            value={privacyPolicy} 
-            onChange={(e) => setPrivacyPolicy(e.target.value)} 
-            className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="Enter your privacy policy content..."
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="termsConditions">Terms & Conditions</Label>
-          <textarea 
-            id="termsConditions" 
-            value={termsConditions} 
-            onChange={(e) => setTermsConditions(e.target.value)} 
-            className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="Enter your terms & conditions content..."
-          />
+        <div className="border-t pt-6 mt-6">
+          <h3 className="text-lg font-semibold mb-2">Legal Documents</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            These documents will appear on /privacy and /terms pages
+          </p>
+          
+          <div className="space-y-4">
+            <div className="grid gap-2">
+              <Label htmlFor="privacyPolicy">Privacy Policy</Label>
+              <textarea 
+                id="privacyPolicy" 
+                value={privacyPolicy} 
+                onChange={(e) => setPrivacyPolicy(e.target.value)} 
+                className="min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Enter your privacy policy content..."
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="termsConditions">Terms & Conditions</Label>
+              <textarea 
+                id="termsConditions" 
+                value={termsConditions} 
+                onChange={(e) => setTermsConditions(e.target.value)} 
+                className="min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Enter your terms & conditions content..."
+              />
+            </div>
+          </div>
         </div>
         <div className="pt-2">
           <Button onClick={handleSave} className="w-full sm:w-auto">Save Settings</Button>

@@ -102,13 +102,13 @@ export default function Index() {
                   {currentSlideIndex === 0 && (
                     <>
                       <h1 
-                        className="text-4xl md:text-5xl font-bold drop-shadow-lg"
+                        className="text-4xl md:text-6xl lg:text-7xl font-bold drop-shadow-lg"
                         style={{ color: heroGradientFontColor }}
                       >
                         {heroTitle}
                       </h1>
                       <p 
-                        className="text-lg md:text-xl max-w-2xl drop-shadow-lg"
+                        className="text-lg md:text-2xl max-w-2xl drop-shadow-lg"
                         style={{ color: heroGradientFontColor }}
                       >
                         {heroSubtitle}
