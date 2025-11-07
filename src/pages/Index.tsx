@@ -20,10 +20,17 @@ export default function Index() {
   const [q, setQ] = useState("");
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [heroGradientFontColor, setHeroGradientFontColor] = useState("#FFFFFF");
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const { categoriesList, productsByCategory, isLoading: catalogLoading } = useCatalog();
   const { settings, loading: settingsLoading } = useSiteSettings();
 
   const isLoading = catalogLoading || settingsLoading;
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -47,6 +54,14 @@ export default function Index() {
   const heroTitle = settings?.hero_title || "";
   const heroSubtitle = settings?.hero_subtitle || "";
   const heroContentPosition = settings?.hero_content_position || "bottom";
+  
+  const titleFontSize = windowWidth >= 768 
+    ? (settings?.hero_title_font_size || 72) 
+    : (settings?.hero_title_font_size || 72) * 0.6;
+
+  const subtitleFontSize = windowWidth >= 768 
+    ? (settings?.hero_subtitle_font_size || 24) 
+    : (settings?.hero_subtitle_font_size || 24) * 0.75;
   
   const getPositionClass = () => {
     switch (heroContentPosition) {
@@ -97,19 +112,25 @@ export default function Index() {
             {/* Hero Content - TEXT ONLY - positioned dynamically */}
             <div className={`absolute inset-0 flex ${getPositionClass()} pointer-events-none`}>
               <div className="container mx-auto px-4 py-8 md:py-12 w-full">
-                <div className="max-w-3xl space-y-6">
+                <div className="max-w-6xl space-y-6">
                   {/* Only show hero text on gradient slide (index 0) */}
                   {currentSlideIndex === 0 && (
                     <>
                       <h1 
-                        className="text-4xl md:text-6xl lg:text-7xl font-bold drop-shadow-lg"
-                        style={{ color: heroGradientFontColor }}
+                        className="font-bold drop-shadow-lg leading-tight"
+                        style={{ 
+                          color: heroGradientFontColor,
+                          fontSize: `${titleFontSize}px`
+                        }}
                       >
                         {heroTitle}
                       </h1>
                       <p 
-                        className="text-lg md:text-2xl max-w-2xl drop-shadow-lg"
-                        style={{ color: heroGradientFontColor }}
+                        className="max-w-4xl drop-shadow-lg leading-relaxed"
+                        style={{ 
+                          color: heroGradientFontColor,
+                          fontSize: `${subtitleFontSize}px`
+                        }}
                       >
                         {heroSubtitle}
                       </p>

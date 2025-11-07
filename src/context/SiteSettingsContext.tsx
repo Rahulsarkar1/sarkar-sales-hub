@@ -21,6 +21,8 @@ export type SiteSettings = {
   festive_image_url: string | null;
   hero_title: string | null;
   hero_subtitle: string | null;
+  hero_title_font_size: number | null;
+  hero_subtitle_font_size: number | null;
   contact_info: string | null;
   about_us: string | null;
   facebook_url: string | null;

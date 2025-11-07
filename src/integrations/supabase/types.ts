@@ -230,7 +230,9 @@ export type Database = {
           hero_gradient_font_color: string | null
           hero_gradient_visible: boolean | null
           hero_subtitle: string | null
+          hero_subtitle_font_size: number | null
           hero_title: string | null
+          hero_title_font_size: number | null
           instagram_url: string | null
           key: string
           logo_url: string | null
@@ -265,7 +267,9 @@ export type Database = {
           hero_gradient_font_color?: string | null
           hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
+          hero_subtitle_font_size?: number | null
           hero_title?: string | null
+          hero_title_font_size?: number | null
           instagram_url?: string | null
           key?: string
           logo_url?: string | null
@@ -300,7 +304,9 @@ export type Database = {
           hero_gradient_font_color?: string | null
           hero_gradient_visible?: boolean | null
           hero_subtitle?: string | null
+          hero_subtitle_font_size?: number | null
           hero_title?: string | null
+          hero_title_font_size?: number | null
           instagram_url?: string | null
           key?: string
           logo_url?: string | null

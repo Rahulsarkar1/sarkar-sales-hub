@@ -97,6 +97,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   const [contactInfo, setContactInfo] = useState(settingsState?.contact_info ?? "");
   const [privacyPolicy, setPrivacyPolicy] = useState(settingsState?.privacy_policy ?? "");
   const [termsConditions, setTermsConditions] = useState(settingsState?.terms_conditions ?? "");
+  const [heroTitleFontSize, setHeroTitleFontSize] = useState<number>(settingsState?.hero_title_font_size ?? 72);
+  const [heroSubtitleFontSize, setHeroSubtitleFontSize] = useState<number>(settingsState?.hero_subtitle_font_size ?? 24);
 
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
@@ -120,6 +122,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
     setContactInfo(settingsState?.contact_info ?? "");
     setPrivacyPolicy(settingsState?.privacy_policy ?? "");
     setTermsConditions(settingsState?.terms_conditions ?? "");
+    setHeroTitleFontSize(settingsState?.hero_title_font_size ?? 72);
+    setHeroSubtitleFontSize(settingsState?.hero_subtitle_font_size ?? 24);
   }, [settingsState]);
 
   const handleSave = async () => {
@@ -145,6 +149,8 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       secondary_color: secondaryColor || null,
       privacy_policy: privacyPolicy || null,
       terms_conditions: termsConditions || null,
+      hero_title_font_size: heroTitleFontSize,
+      hero_subtitle_font_size: heroSubtitleFontSize,
     });
     if (err) alert(`Error: ${err.message}`);
     else alert("Settings saved");
@@ -169,6 +175,52 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
         <div className="grid gap-2">
           <Label htmlFor="heroSubtitle">Hero subtitle</Label>
           <Input id="heroSubtitle" value={heroSubtitle} onChange={(e)=>setHeroSubtitle(e.target.value)} placeholder="Exide home/inverter batteries, car & bike batteries, and Microtek inverters..." />
+        </div>
+        <div className="border-t pt-6 mt-6">
+          <h3 className="text-lg font-semibold mb-4">Hero Font Sizes</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            Control the font sizes for hero section text (desktop view)
+          </p>
+          
+          <div className="space-y-6">
+            <div className="grid gap-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="heroTitleFontSize">Title Font Size</Label>
+                <span className="text-sm font-mono text-muted-foreground">{heroTitleFontSize}px</span>
+              </div>
+              <Slider
+                id="heroTitleFontSize"
+                min={32}
+                max={96}
+                step={2}
+                value={[heroTitleFontSize]}
+                onValueChange={([v]) => setHeroTitleFontSize(v)}
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground">
+                Range: 32px - 96px (mobile: {Math.round(heroTitleFontSize * 0.6)}px)
+              </p>
+            </div>
+
+            <div className="grid gap-3">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="heroSubtitleFontSize">Subtitle Font Size</Label>
+                <span className="text-sm font-mono text-muted-foreground">{heroSubtitleFontSize}px</span>
+              </div>
+              <Slider
+                id="heroSubtitleFontSize"
+                min={14}
+                max={36}
+                step={1}
+                value={[heroSubtitleFontSize]}
+                onValueChange={([v]) => setHeroSubtitleFontSize(v)}
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground">
+                Range: 14px - 36px (mobile: {Math.round(heroSubtitleFontSize * 0.75)}px)
+              </p>
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="grid gap-2">
