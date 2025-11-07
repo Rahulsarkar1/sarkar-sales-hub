@@ -37,6 +37,14 @@ export default function CategorySection({
       ? "var(--brand-car)"
       : "var(--brand-bike)";
 
+  // Calculate dynamic height based on products
+  const maxProductsInSlide = Math.max(...slides.map(slide => slide.length));
+  const rowsNeeded = Math.ceil(maxProductsInSlide / 2); // 2 columns on desktop
+  const cardHeight = 190;
+  const gap = 24;
+  const minHeight = 200;
+  const dynamicHeight = Math.max(minHeight, rowsNeeded * cardHeight + (rowsNeeded - 1) * gap);
+
   return (
     <section className="py-10" aria-labelledby={title.replace(/\s+/g, "-").toLowerCase()}>
       <div className="container mx-auto px-4">
@@ -54,7 +62,7 @@ export default function CategorySection({
           {/* On mobile: remove fixed height and avoid trapping scroll by not forcing vertical carousel height */}
           {!isMobile ? (
             <Carousel orientation="vertical" className="relative">
-              <CarouselContent className="h-[400px]">
+              <CarouselContent style={{ height: `${dynamicHeight}px` }} className="transition-all duration-300">
                 {slides.map((group, idx) => (
                   <CarouselItem key={idx} className="basis-full">
                     <div className="grid grid-cols-2 gap-6">
