@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+import { Bell } from "lucide-react";
 import { useSettings } from "@/context/SettingsContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,6 +103,10 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   const [heroTitleFontSize, setHeroTitleFontSize] = useState<number>(settingsState?.hero_title_font_size ?? 72);
   const [heroSubtitleFontSize, setHeroSubtitleFontSize] = useState<number>(settingsState?.hero_subtitle_font_size ?? 24);
   const [notificationPopupEnabled, setNotificationPopupEnabled] = useState<boolean>(settingsState?.notification_popup_enabled ?? false);
+  const [notificationTitle, setNotificationTitle] = useState<string>(settingsState?.notification_title ?? 'Stay updated!');
+  const [notificationMessage, setNotificationMessage] = useState<string>(settingsState?.notification_message ?? 'Check out our latest offers and products!');
+  const [notificationImageUrl, setNotificationImageUrl] = useState<string>(settingsState?.notification_image_url ?? '');
+  const [notificationActionUrl, setNotificationActionUrl] = useState<string>(settingsState?.notification_action_url ?? '/');
 
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
@@ -126,6 +133,10 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
     setHeroTitleFontSize(settingsState?.hero_title_font_size ?? 72);
     setHeroSubtitleFontSize(settingsState?.hero_subtitle_font_size ?? 24);
     setNotificationPopupEnabled(settingsState?.notification_popup_enabled ?? false);
+    setNotificationTitle(settingsState?.notification_title ?? 'Stay updated!');
+    setNotificationMessage(settingsState?.notification_message ?? 'Check out our latest offers and products!');
+    setNotificationImageUrl(settingsState?.notification_image_url ?? '');
+    setNotificationActionUrl(settingsState?.notification_action_url ?? '/');
   }, [settingsState]);
 
   const handleSave = async () => {
@@ -154,6 +165,10 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       hero_title_font_size: heroTitleFontSize,
       hero_subtitle_font_size: heroSubtitleFontSize,
       notification_popup_enabled: notificationPopupEnabled,
+      notification_title: notificationTitle,
+      notification_message: notificationMessage,
+      notification_image_url: notificationImageUrl || null,
+      notification_action_url: notificationActionUrl,
     });
     if (err) alert(`Error: ${err.message}`);
     else alert("Settings saved");
@@ -323,6 +338,117 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
               • Uses browser's native notification permission API
             </p>
           </div>
+          {notificationPopupEnabled && (
+            <div className="mt-6 space-y-4 pl-4 border-l-2 border-primary/20">
+              <div className="space-y-2">
+                <Label htmlFor="notificationTitle">Popup Title</Label>
+                <Input
+                  id="notificationTitle"
+                  value={notificationTitle}
+                  onChange={(e) => setNotificationTitle(e.target.value)}
+                  placeholder="Stay updated!"
+                  maxLength={50}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Title shown in the permission request popup
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="notificationMessage">Popup Message</Label>
+                <Textarea
+                  id="notificationMessage"
+                  value={notificationMessage}
+                  onChange={(e) => setNotificationMessage(e.target.value)}
+                  placeholder="Allow notifications for latest updates and offers."
+                  rows={2}
+                  maxLength={150}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Message shown in the permission request popup
+                </p>
+              </div>
+
+              <div className="border-t pt-4 mt-4">
+                <h4 className="font-medium mb-4 flex items-center gap-2">
+                  <Bell className="w-4 h-4" />
+                  Browser Notification Settings
+                </h4>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Configure the actual browser push notifications sent to users who granted permission
+                </p>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="notificationImageUrl">Notification Image URL (Optional)</Label>
+                    <Input
+                      id="notificationImageUrl"
+                      value={notificationImageUrl}
+                      onChange={(e) => setNotificationImageUrl(e.target.value)}
+                      placeholder="https://example.com/image.jpg"
+                      type="url"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Image shown in rich notifications (desktop browsers)
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="notificationActionUrl">Click Action URL</Label>
+                    <Input
+                      id="notificationActionUrl"
+                      value={notificationActionUrl}
+                      onChange={(e) => setNotificationActionUrl(e.target.value)}
+                      placeholder="/"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      URL to open when user clicks the notification
+                    </p>
+                  </div>
+
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        const { sendBrowserNotification, hasNotificationPermission } = await import('@/lib/notifications');
+                        if (hasNotificationPermission()) {
+                          const success = await sendBrowserNotification({
+                            title: notificationTitle,
+                            message: notificationMessage,
+                            image: notificationImageUrl || undefined,
+                            actionUrl: notificationActionUrl,
+                          });
+                          if (success) {
+                            toast({ title: "Test notification sent!" });
+                          } else {
+                            toast({ 
+                              title: "Failed to send notification", 
+                              description: "Please check browser console for errors",
+                              variant: "destructive"
+                            });
+                          }
+                        } else {
+                          toast({ 
+                            title: "Permission required", 
+                            description: "Please allow notifications first",
+                            variant: "destructive"
+                          });
+                        }
+                      }}
+                    >
+                      <Bell className="w-4 h-4 mr-2" />
+                      Send Test Notification
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Test how the notification will appear (requires notification permission)
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="border-t pt-6 mt-6">
           <h3 className="text-lg font-semibold mb-2">Legal Documents</h3>

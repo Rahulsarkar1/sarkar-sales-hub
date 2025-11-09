@@ -237,7 +237,11 @@ export type Database = {
           key: string
           logo_url: string | null
           map_embed_src: string | null
+          notification_action_url: string | null
+          notification_image_url: string | null
+          notification_message: string | null
           notification_popup_enabled: boolean | null
+          notification_title: string | null
           phone: string | null
           primary_color: string | null
           privacy_policy: string | null
@@ -275,7 +279,11 @@ export type Database = {
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null
+          notification_action_url?: string | null
+          notification_image_url?: string | null
+          notification_message?: string | null
           notification_popup_enabled?: boolean | null
+          notification_title?: string | null
           phone?: string | null
           primary_color?: string | null
           privacy_policy?: string | null
@@ -313,7 +321,11 @@ export type Database = {
           key?: string
           logo_url?: string | null
           map_embed_src?: string | null
+          notification_action_url?: string | null
+          notification_image_url?: string | null
+          notification_message?: string | null
           notification_popup_enabled?: boolean | null
+          notification_title?: string | null
           phone?: string | null
           primary_color?: string | null
           privacy_policy?: string | null

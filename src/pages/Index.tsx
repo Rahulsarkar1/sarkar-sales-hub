@@ -101,7 +101,11 @@ export default function Index() {
       <div className="min-h-[80vh] md:min-h-screen">
         <Header onSearch={setQ} />
         <FestivePopup />
-        <NotificationPermissionPopup enabled={settings?.notification_popup_enabled ?? false} />
+        <NotificationPermissionPopup 
+          enabled={settings?.notification_popup_enabled ?? false}
+          title={settings?.notification_title ?? 'Stay updated!'}
+          message={settings?.notification_message ?? 'Allow notifications for latest updates and offers.'}
+        />
 
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}

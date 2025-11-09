@@ -34,6 +34,10 @@ export type SiteSettings = {
   site_theme: string | null;
   hero_content_position: string | null;
   notification_popup_enabled: boolean | null;
+  notification_title: string | null;
+  notification_message: string | null;
+  notification_image_url: string | null;
+  notification_action_url: string | null;
 };
 
 interface SiteSettingsContextValue {
