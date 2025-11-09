@@ -7,6 +7,7 @@ import Contact from "@/components/sections/Contact";
 import StickyActions from "@/components/StickyActions";
 import FestivePopup from "@/components/FestivePopup";
 import HeroSlideshow from "@/components/HeroSlideshow";
+import NotificationPermissionPopup from "@/components/NotificationPermissionPopup";
 import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { sections, site } from "@/config/site";
@@ -100,6 +101,7 @@ export default function Index() {
       <div className="min-h-[80vh] md:min-h-screen">
         <Header onSearch={setQ} />
         <FestivePopup />
+        <NotificationPermissionPopup enabled={settings?.notification_popup_enabled ?? false} />
 
         <main className="pb-16 overflow-visible md:overflow-hidden">
           {/* Hero */}

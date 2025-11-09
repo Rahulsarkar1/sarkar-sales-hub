@@ -33,6 +33,7 @@ export type SiteSettings = {
   hero_gradient_font_color: string | null;
   site_theme: string | null;
   hero_content_position: string | null;
+  notification_popup_enabled: boolean | null;
 };
 
 interface SiteSettingsContextValue {

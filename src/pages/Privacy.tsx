@@ -26,15 +26,10 @@ export default function Privacy() {
               dangerouslySetInnerHTML={{ __html: settings.privacy_policy.replace(/\n/g, '<br/>') }}
             />
           ) : (
-            <>
-              <p>We respect your privacy. This policy explains what data we collect and how we use it to serve you better.</p>
-              <h2>Information We Collect</h2>
-              <p>Contact details you provide (such as name and phone) when you enquire or place an order.</p>
-              <h2>How We Use Your Information</h2>
-              <p>We use your information to respond to enquiries, fulfill orders, and provide support. We do not sell your data.</p>
-              <h2>Contact</h2>
-              <p>If you have any questions about this policy, contact us at {settings?.email || site.email}.</p>
-            </>
+            <div className="text-center py-12 text-muted-foreground not-prose">
+              <p className="text-lg mb-2">Privacy Policy not yet configured</p>
+              <p className="text-sm">Please contact the administrator.</p>
+            </div>
           )}
         </article>
       </main>

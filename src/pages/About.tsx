@@ -23,14 +23,9 @@ export default function About() {
               dangerouslySetInnerHTML={{ __html: settings.about_us.replace(/\n/g, '<br/>') }}
             />
           ) : (
-            <div className="text-muted-foreground leading-relaxed">
-              <p>Welcome to {settings?.site_name || 'Sarkar Sales'}, your trusted partner for all battery solutions.</p>
-              <br/>
-              <p>We specialize in providing high-quality batteries for cars, bikes, inverters, and more. With years of experience in the industry, we are committed to delivering reliable products and exceptional customer service.</p>
-              <br/>
-              <p>Our team of experts is always ready to help you find the perfect battery solution for your needs. We work with leading brands and offer competitive prices to ensure you get the best value for your money.</p>
-              <br/>
-              <p>Visit our store or contact us today to learn more about our products and services!</p>
+            <div className="text-center py-12 text-muted-foreground">
+              <p className="text-lg mb-2">Content not yet configured</p>
+              <p className="text-sm">Please contact the administrator to add About Us content.</p>
             </div>
           )}
         </div>

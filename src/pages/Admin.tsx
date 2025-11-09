@@ -99,6 +99,7 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
   const [termsConditions, setTermsConditions] = useState(settingsState?.terms_conditions ?? "");
   const [heroTitleFontSize, setHeroTitleFontSize] = useState<number>(settingsState?.hero_title_font_size ?? 72);
   const [heroSubtitleFontSize, setHeroSubtitleFontSize] = useState<number>(settingsState?.hero_subtitle_font_size ?? 24);
+  const [notificationPopupEnabled, setNotificationPopupEnabled] = useState<boolean>(settingsState?.notification_popup_enabled ?? false);
 
   useEffect(() => {
     setSiteName(settingsState?.site_name ?? "");
@@ -124,6 +125,7 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
     setTermsConditions(settingsState?.terms_conditions ?? "");
     setHeroTitleFontSize(settingsState?.hero_title_font_size ?? 72);
     setHeroSubtitleFontSize(settingsState?.hero_subtitle_font_size ?? 24);
+    setNotificationPopupEnabled(settingsState?.notification_popup_enabled ?? false);
   }, [settingsState]);
 
   const handleSave = async () => {
@@ -151,6 +153,7 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
       terms_conditions: termsConditions || null,
       hero_title_font_size: heroTitleFontSize,
       hero_subtitle_font_size: heroSubtitleFontSize,
+      notification_popup_enabled: notificationPopupEnabled,
     });
     if (err) alert(`Error: ${err.message}`);
     else alert("Settings saved");
@@ -295,6 +298,31 @@ function SiteSettingsCard({ settingsState, onSave }: { settingsState: any; onSav
         <div className="grid gap-2">
           <Label htmlFor="festiveImage">Festive image URL</Label>
           <Input id="festiveImage" value={festiveImage} onChange={(e) => setFestiveImage(e.target.value)} placeholder="https://..." />
+        </div>
+        <div className="border-t pt-6 mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <Label className="text-base font-semibold">Notification Permission Popup</Label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Show a popup asking users to enable browser notifications
+              </p>
+            </div>
+            <Switch 
+              checked={notificationPopupEnabled} 
+              onCheckedChange={setNotificationPopupEnabled} 
+            />
+          </div>
+          <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+            <p className="text-xs text-muted-foreground">
+              • Appears 10 seconds after user activity (first visit)
+            </p>
+            <p className="text-xs text-muted-foreground">
+              • If dismissed, won't show again for 7 days
+            </p>
+            <p className="text-xs text-muted-foreground">
+              • Uses browser's native notification permission API
+            </p>
+          </div>
         </div>
         <div className="border-t pt-6 mt-6">
           <h3 className="text-lg font-semibold mb-2">Legal Documents</h3>

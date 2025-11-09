@@ -26,16 +26,10 @@ export default function Terms() {
               dangerouslySetInnerHTML={{ __html: settings.terms_conditions.replace(/\n/g, '<br/>') }}
             />
           ) : (
-            <>
-              <h2>General</h2>
-              <p>By using this website, you agree to the following terms and conditions. Please read them carefully.</p>
-              <h2>Pricing & Availability</h2>
-              <p>Prices and product availability are subject to change without notice. Offers may vary by location.</p>
-              <h2>Warranty & Installation</h2>
-              <p>Warranties are as provided by the manufacturer. Installation and service terms will be communicated during purchase.</p>
-              <h2>Contact</h2>
-              <p>For any concerns regarding these terms, contact us at {settings?.email || site.email}.</p>
-            </>
+            <div className="text-center py-12 text-muted-foreground not-prose">
+              <p className="text-lg mb-2">Terms & Conditions not yet configured</p>
+              <p className="text-sm">Please contact the administrator.</p>
+            </div>
           )}
         </article>
       </main>
