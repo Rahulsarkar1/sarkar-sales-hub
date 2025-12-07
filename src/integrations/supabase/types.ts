@@ -14,6 +14,140 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_daily_summary: {
+        Row: {
+          call_clicks: number | null
+          date: string
+          desktop_visits: number | null
+          direct_traffic: number | null
+          id: string
+          mobile_visits: number | null
+          organic_traffic: number | null
+          page_views: number | null
+          product_views: number | null
+          referral_traffic: number | null
+          social_traffic: number | null
+          tablet_visits: number | null
+          total_visits: number | null
+          unique_visitors: number | null
+          updated_at: string
+          whatsapp_clicks: number | null
+        }
+        Insert: {
+          call_clicks?: number | null
+          date: string
+          desktop_visits?: number | null
+          direct_traffic?: number | null
+          id?: string
+          mobile_visits?: number | null
+          organic_traffic?: number | null
+          page_views?: number | null
+          product_views?: number | null
+          referral_traffic?: number | null
+          social_traffic?: number | null
+          tablet_visits?: number | null
+          total_visits?: number | null
+          unique_visitors?: number | null
+          updated_at?: string
+          whatsapp_clicks?: number | null
+        }
+        Update: {
+          call_clicks?: number | null
+          date?: string
+          desktop_visits?: number | null
+          direct_traffic?: number | null
+          id?: string
+          mobile_visits?: number | null
+          organic_traffic?: number | null
+          page_views?: number | null
+          product_views?: number | null
+          referral_traffic?: number | null
+          social_traffic?: number | null
+          tablet_visits?: number | null
+          total_visits?: number | null
+          unique_visitors?: number | null
+          updated_at?: string
+          whatsapp_clicks?: number | null
+        }
+        Relationships: []
+      }
+      analytics_events: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          event_name: string | null
+          event_type: string
+          id: string
+          page_path: string | null
+          product_id: string | null
+          product_name: string | null
+          referrer: string | null
+          segment_name: string | null
+          session_id: string | null
+          source: string | null
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_name?: string | null
+          event_type: string
+          id?: string
+          page_path?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          referrer?: string | null
+          segment_name?: string | null
+          session_id?: string | null
+          source?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_name?: string | null
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          referrer?: string | null
+          segment_name?: string | null
+          session_id?: string | null
+          source?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hero_slides: {
         Row: {
           created_at: string

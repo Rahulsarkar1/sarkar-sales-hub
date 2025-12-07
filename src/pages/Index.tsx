@@ -16,6 +16,7 @@ import type { Product } from "@/data/products";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import ShimmerLoading from "@/components/ShimmerLoading";
 import { trackCTAClick } from "@/lib/analytics";
+import { trackPageView } from "@/lib/analytics-tracker";
 
 export default function Index() {
   const [q, setQ] = useState("");
@@ -31,6 +32,11 @@ export default function Index() {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Track page view on mount
+  useEffect(() => {
+    trackPageView('/');
   }, []);
 
   const filtered = useMemo(() => {

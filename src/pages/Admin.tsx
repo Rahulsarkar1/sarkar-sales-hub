@@ -17,6 +17,7 @@ import ReviewsManager from "@/components/admin/ReviewsManager";
 import PasswordChange from "@/components/admin/PasswordChange";
 import ColorPalette from "@/components/admin/ColorPalette";
 import HeroSlidesManager from "@/components/admin/HeroSlidesManager";
+import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
@@ -64,6 +65,7 @@ export default function Admin() {
           </Button>
         </div>
         <div className="space-y-8">
+          <AnalyticsDashboard />
           <SiteSettingsCard settingsState={settings} onSave={updateSettings} />
           <ColorPalette onColorSelect={(primary, secondary) => updateSettings({ primary_color: primary, secondary_color: secondary })} />
           <HeroSlidesManager />

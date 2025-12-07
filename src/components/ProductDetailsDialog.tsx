@@ -1,14 +1,25 @@
-
+import { useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import LeadModal from "@/components/LeadModal";
 import { type Product, formatCurrency } from "@/data/products";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { trackProductView } from "@/lib/analytics-tracker";
+import { useState } from "react";
 
 export default function ProductDetailsDialog({ product, children }: { product: Product; children: React.ReactNode }) {
+  const [hasTracked, setHasTracked] = useState(false);
+  
   const discounted = product.discountPercent
     ? Math.round(product.price * (1 - product.discountPercent / 100))
     : product.price;
+
+  const handleOpenChange = (open: boolean) => {
+    if (open && !hasTracked) {
+      trackProductView(product.id, product.name);
+      setHasTracked(true);
+    }
+  };
 
   const { data: specs = [], isLoading: specsLoading } = useQuery({
     queryKey: ["product_specs", product.id],
@@ -37,7 +48,7 @@ export default function ProductDetailsDialog({ product, children }: { product: P
   });
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="w-[92vw] md:w-auto max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
