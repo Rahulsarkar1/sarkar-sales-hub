@@ -2,6 +2,7 @@ import { MessageCircle, Phone } from "lucide-react";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { site } from "@/config/site";
 import { trackContactAction } from "@/lib/analytics";
+import { trackCallClick, trackWhatsAppClick } from "@/lib/analytics-tracker";
 
 export default function StickyActions() {
   const { settings } = useSiteSettings();
@@ -12,6 +13,7 @@ export default function StickyActions() {
 
   const handleWhatsAppClick = () => {
     trackContactAction('whatsapp', 'sticky_button');
+    trackWhatsAppClick('sticky_button');
     const text = encodeURIComponent("Hello Sarkar Sales! I want to buy a battery/inverter.");
     const url = `https://wa.me/${whatsapp}?text=${text}`;
     
@@ -22,6 +24,11 @@ export default function StickyActions() {
       // For desktop, open in new tab with web.whatsapp.com fallback
       window.open(url, '_blank');
     }
+  };
+
+  const handleCallClick = () => {
+    trackContactAction('phone', 'sticky_button');
+    trackCallClick('sticky_button');
   };
 
   return (
@@ -36,7 +43,7 @@ export default function StickyActions() {
       <a
         href={`tel:${phone}`}
         aria-label="Call Sarkar Sales"
-        onClick={() => trackContactAction('phone', 'sticky_button')}
+        onClick={handleCallClick}
         className="h-12 w-12 rounded-full bg-primary text-primary-foreground border border-primary flex items-center justify-center hover-scale shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       >
         <Phone className="h-6 w-6" />
